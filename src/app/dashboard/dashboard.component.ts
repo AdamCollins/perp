@@ -9,6 +9,7 @@ declare var $:any;
     templateUrl: 'dashboard.component.html'
 })
 
+//Zac, (1) data is loaded here to be used on charts in dashboard.components.html 
 export class DashboardComponent implements OnInit{
     ngOnInit(){
         var dataSales = {
