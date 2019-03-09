@@ -8,6 +8,7 @@ import { IconsComponent }   from './icons/icons.component';
 import { MapsComponent }   from './maps/maps.component';
 import { NotificationsComponent }   from './notifications/notifications.component';
 import { UpgradeComponent }   from './upgrade/upgrade.component';
+import { AdminComponent } from './admin/admin.component';
 
 export const AppRoutes: Routes = [
     {
@@ -46,5 +47,10 @@ export const AppRoutes: Routes = [
     {
         path: 'upgrade',
         component: UpgradeComponent
+    },
+    {
+        path: 'admin',
+        component: AdminComponent
     }
+
 ]

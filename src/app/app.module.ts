@@ -18,6 +18,8 @@ import { IconsComponent }   from './icons/icons.component';
 import { MapsComponent }   from './maps/maps.component';
 import { NotificationsComponent }   from './notifications/notifications.component';
 import { UpgradeComponent }   from './upgrade/upgrade.component';
+import { AdminComponent } from './admin/admin.component';
+import { PiechartComponent } from './charts/piechart/piechart.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { UpgradeComponent }   from './upgrade/upgrade.component';
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    UpgradeComponent
+    UpgradeComponent,
+    AdminComponent,
+    PiechartComponent
   ],
   imports: [
     BrowserModule,
