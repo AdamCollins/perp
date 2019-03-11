@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import * as Chartist from 'chartist';
+import { PieData } from '../../models/pie-data';
 @Component({
   selector: 'app-piechart',
   templateUrl: './piechart.component.html'
 })
 export class PiechartComponent implements OnInit{
   @ViewChild('chart') chart: ElementRef;
-  @Input() pie;
+  @Input() pie : PieData;
   constructor() { }
 
   ngOnInit() {
@@ -23,7 +24,7 @@ export class PiechartComponent implements OnInit{
       }
     };
 
-    new Chartist.Pie(this.chart.nativeElement, this.pie.data, optionsPreferences);
+    // new Chartist.Pie(this.chart.nativeElement, this.pie.data, optionsPreferences);
 
     new Chartist.Pie(this.chart.nativeElement, this.pie.data);
   }

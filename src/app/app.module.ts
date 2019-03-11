@@ -20,6 +20,7 @@ import { NotificationsComponent }   from './notifications/notifications.componen
 import { UpgradeComponent }   from './upgrade/upgrade.component';
 import { AdminComponent } from './admin/admin.component';
 import { PiechartComponent } from './charts/piechart/piechart.component';
+import { TablechartComponent } from './charts/tablechart/tablechart.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PiechartComponent } from './charts/piechart/piechart.component';
     NotificationsComponent,
     UpgradeComponent,
     AdminComponent,
-    PiechartComponent
+    PiechartComponent,
+    TablechartComponent
   ],
   imports: [
     BrowserModule,

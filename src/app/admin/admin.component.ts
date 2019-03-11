@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
+import { PieData } from '../models/pie-data';
 
 
 @Component({
@@ -11,7 +12,7 @@ export class AdminComponent implements OnInit {
   usersActive:number;
   usersTotal:number;
 
-  pie:Object;
+  pie:PieData;
 
 
   ngOnInit() {
@@ -88,7 +89,7 @@ export class AdminComponent implements OnInit {
     //Editing this changes the data used build the pie chart
     this.pie = {
       title:'User Locations',
-      category:'By country',
+      subtitle:'By country',
       data:{
         labels: ['62%', '22%', '6%', '10%'],
         series: [62, 22, 6, 10]
