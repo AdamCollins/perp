@@ -9,8 +9,12 @@ export class TablechartComponent implements OnInit {
   public pages = [];
   public pageIndex = 0;
   private pageSize = 10;
+  nextPage(i){
+    this.pageIndex+=i
+  }
   goToPage(i){
-    this.pageIndex = Math.max(i,0);
+    this.pageIndex = i
+    console.log(i);
   }
   constructor() { }
   @Input() data: TableData;
