@@ -40,6 +40,17 @@ To create a `Python 3.7` virtual environment for the project run,
 ```bash
 > tox -e py37
 ```
+
+To enable the virtual environment use
+```bash
+> source .tox/py37/bin/activate 
+```
+You will know the environment is activated by the `py37` directive.
+Something like:
+```
+(py37) >
+```
+ 
 To configure Pycharm to point to your new virtual environment, 
 * Navigate to your PyCharm preferences
 * Select `Project: perp`
