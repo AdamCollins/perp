@@ -63,3 +63,23 @@ To configure Pycharm to point to your new virtual environment,
 * Select `Existing Interpreter`
 * Click the `...` icon, and navigate to `/path/to/perp/.tox/py37/bin/python`
 * Click `Ok`
+
+## Application Configuration
+
+Perp will look for an application configuration file at the following 
+locations.
+```bash
+/etc/perp/confguration.ini
+/usr/local/etc/perp/configuration.ini
+```
+There is a sample configuration file located in this repository at
+ `./etc/perp/configuration.ini`. To deploy the sample configuration, 
+ use the following command 
+```bash
+mkdir -p /usr/local/etc/perp && cp etc/perp/configuration.ini /usr/local/etc/perp/configuration.ini
+```
+Once deployed, you can edit the configuration file at the deployed location, and
+the application will be able to pick up the file from there. Please do not edit 
+the sample configuration file in the repository unless you are adding new 
+config options.
+  

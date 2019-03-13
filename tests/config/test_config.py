@@ -28,15 +28,26 @@ def test_get_config_option_from_file(
         mock_config_file_path,
         mocker
 ):
+    def open_side_effect(path, **kwargs):
+        if path == "/etc/perp/configuration.ini":
+            raise FileNotFoundError
+        return mocker.DEFAULT
 
-    expected_config_path = "/etc/perp/configuration.ini"
+    expected_config_paths = (
+        "/etc/perp/configuration.ini",
+        "/usr/local/etc/perp/configuration.ini"
+    )
     open_mocker = mocker.patch(
-        "builtins.open", return_value=open(mock_config_file_path)
+        "builtins.open",
+        side_effect=open_side_effect,
+        return_value=open(mock_config_file_path)
     )
 
     config = Config()
 
-    open_mocker.assert_called_with(expected_config_path, encoding=None)
+    assert open_mocker.call_count == 2
+    for expected_path in expected_config_paths:
+        open_mocker.assert_any_call(expected_path, encoding=None)
 
     value = config.get_config_option(section, option)
     assert value == expected
@@ -62,7 +73,7 @@ def test_get_config_option_from_env(
     )
 
     expected_msg = (
-        "No configuration file found at /etc/perp/configuration.ini"
+        "No configuration file found"
     )
     with caplog.at_level(logging.WARN):
         config = Config()
