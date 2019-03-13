@@ -5,14 +5,24 @@ import logging
 
 class Config:
 
-    CONFIG_FILE_LOCATION = "/etc/perp/configuration.ini"
+    CONFIG_FILE_LOCATIONS = (
+        "/etc/perp/configuration.ini",
+        "/usr/local/etc/perp/configuration.ini"
+    )
 
     def __init__(self):
         self.config = configparser.ConfigParser()
-        files_read = self.config.read(self.CONFIG_FILE_LOCATION)
-        if self.CONFIG_FILE_LOCATION not in files_read:
+        files_read = self.config.read(self.CONFIG_FILE_LOCATIONS)
+
+        for path in self.CONFIG_FILE_LOCATIONS:
+            if path in files_read:
+                logging.info(
+                    f"Configuration file read at {path}"
+                )
+
+        if not files_read:
             logging.warning(
-                f"No configuration file found at {self.CONFIG_FILE_LOCATION}"
+                f"No configuration file found"
             )
 
     def get_config_option(self, section, option):
