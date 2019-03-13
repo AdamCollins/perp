@@ -50,6 +50,10 @@ Something like:
 ```
 (py37) >
 ```
+To deactivate the virtual environment type
+```bash
+deactivate
+``` 
  
 To configure Pycharm to point to your new virtual environment, 
 * Navigate to your PyCharm preferences
