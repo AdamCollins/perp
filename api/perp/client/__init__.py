@@ -21,12 +21,35 @@ def get_mysql_client():
 class MysqlClient:
 
     def __init__(self, host, user, password, db):
-        self.connection = pymysql.connect(
-            host=host,
-            user=user,
-            password=password,
-            db=db
+        logging.info(
+            f"Connecting to database {db} at {host} as {user}"
         )
+        self.host = host
+        self.user = user
+        self.password = password
+        self.db = db
+        self._connect()
+
+    def _connect(self):
+
+        if hasattr(self, "connection") and self.connection is not None:
+            self.connection.ping(reconnect=True)
+        else:
+            try:
+                self.connection = pymysql.connect(
+                    host=self.host,
+                    user=self.user,
+                    password=self.password,
+                    db=self.db
+                )
+                if self.connection.open:
+                    logging.info(f"Connection to database successful")
+            except pymysql.err.OperationalError as e:
+                self.connection = None
+                logging.error(e)
+                logging.error(f"Unable to connect to database")
+                return False
+        return True
 
     def select_all_from_table(
             self,
@@ -42,11 +65,14 @@ class MysqlClient:
         :return: A list of dicts representing the rows of the result
         """
 
-        self.connection.ping(reconnect=True)
+        if not self._connect():
+            raise PerpException("Unable to connect to database")
 
         query_string = f"SELECT * FROM {table_name}"
         query_string += f" ORDER BY {order_by}" if order_by else ""
         query_string += f" LIMIT {num_rows}" if num_rows else ""
+
+        logging.info(f"Querying database with query: {query_string}")
 
         try:
             with self.connection.cursor(pymysql.cursors.DictCursor) as cursor:
@@ -54,5 +80,5 @@ class MysqlClient:
                 result = cursor.fetchall()
         except pymysql.err.DatabaseError as e:
             logging.error(e)
-            raise PerpException
+            raise PerpException("Error occurred while executing query")
         return result
