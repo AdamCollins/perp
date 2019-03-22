@@ -32,23 +32,23 @@ class MysqlClient:
 
     def _connect(self):
 
-        if hasattr(self, "connection") and self.connection is not None:
-            self.connection.ping(reconnect=True)
-        else:
-            try:
-                self.connection = pymysql.connect(
-                    host=self.host,
-                    user=self.user,
-                    password=self.password,
-                    db=self.db
-                )
-                if self.connection.open:
-                    logging.info(f"Connection to database successful")
-            except pymysql.err.OperationalError as e:
-                self.connection = None
-                logging.error(e)
-                logging.error(f"Unable to connect to database")
-                return False
+        try:
+            if hasattr(self, "connection") and self.connection is not None:
+                self.connection.ping(reconnect=True)
+            else:
+                    self.connection = pymysql.connect(
+                        host=self.host,
+                        user=self.user,
+                        password=self.password,
+                        db=self.db
+                    )
+                    if self.connection.open:
+                        logging.info(f"Connection to database successful")
+        except pymysql.err.OperationalError as e:
+            self.connection = None
+            logging.error(e)
+            logging.error(f"Unable to connect to database")
+            return False
         return True
 
     def select_all_from_table(
