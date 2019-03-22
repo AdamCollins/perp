@@ -1,22 +1,23 @@
 import json
+import logging
 
 from flask import Flask
 
-from ecs_test_app.client import get_mysql_client
-from ecs_test_app.excpetion import PerpException
+from perp.client import get_mysql_client
+from perp.excpetion import PerpException
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 @app.route("/api/v1/table/<table_name>")
 def select_all_from_table(table_name):
-    select_string = f"SELECT * FROM {table_name}"
     client = get_mysql_client()
     try:
-        result = client.select(select_string)
+        result = client.select_all_from_table(table_name)
         return json.dumps(result)
-    except PerpException:
-        return f'Table with name "{table_name}" does not exist', 400
+    except PerpException as e:
+        return str(e), 400
 
 
 @app.route("/api/v1/hello")
