@@ -1,0 +1,12 @@
+.tox
+.idea
+.DS_store
+sdist/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+AUTHORS
+ChangeLog
+.pytest_cache/
+__pycache__/
