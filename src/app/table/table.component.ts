@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {TableData } from 'app/models/table-data';
-
+import { TableData } from 'app/models/table-data';
+import { HttpClient } from '@angular/common/http'
 
 @Component({
     selector: 'table-cmp',
@@ -11,7 +11,15 @@ import {TableData } from 'app/models/table-data';
 export class TableComponent implements OnInit{
     public tableData1: TableData;
     public tableData2: TableData;
+    constructor(private http: HttpClient){}
+
+
     ngOnInit(){
+        this.http.get('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime').subscribe(data=>{
+            //log api data for crime table
+            console.log(data);
+        })
+
         this.tableData1 = {
             title:'employees saLarIes',
             subtitle:'Employees salaries by country.',
