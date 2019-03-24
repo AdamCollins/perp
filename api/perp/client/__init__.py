@@ -36,14 +36,14 @@ class MysqlClient:
             if hasattr(self, "connection") and self.connection is not None:
                 self.connection.ping(reconnect=True)
             else:
-                    self.connection = pymysql.connect(
-                        host=self.host,
-                        user=self.user,
-                        password=self.password,
-                        db=self.db
-                    )
-                    if self.connection.open:
-                        logging.info(f"Connection to database successful")
+                self.connection = pymysql.connect(
+                    host=self.host,
+                    user=self.user,
+                    password=self.password,
+                    db=self.db
+                )
+                if self.connection.open:
+                    logging.info(f"Connection to database successful")
         except pymysql.err.OperationalError as e:
             self.connection = None
             logging.error(e)
