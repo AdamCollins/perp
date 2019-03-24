@@ -10,15 +10,36 @@ import { HttpClient } from '@angular/common/http'
 
 export class TableComponent implements OnInit{
     public tableData1: TableData;
-    public tableData2: TableData;
+    public crimeData: TableData;
     constructor(private http: HttpClient){}
 
 
-    ngOnInit(){
+    getCrimeData(){
         this.http.get('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime').subscribe(data=>{
             //log api data for crime table
             console.log(data);
-        })
+            // let dataRows = [];
+            // //TODO replace with data param once cors is fixed.
+            // for (let x of this.api) {
+            //     let row = [x.Crime_ID, x.NID, x.c_datetime, x.description];
+            //     dataRows.push(row);
+            // }
+            
+
+            // return {
+            //     title : 'Crimes',
+            //     subtitle: '',
+            //     headerRow : ['ID','Neighbourhood ID', 'Time', 'Description'],
+            //     dataRows : dataRows
+            // }
+        });
+    }
+
+    ngOnInit(){
+
+       console.log(this.getCrimeData());
+        // this.tableData1 = this.getCrimeData();
+        // this.crimeData = //this.getCrimeData();
 
         this.tableData1 = {
             title:'employees saLarIes',
@@ -40,4 +61,57 @@ export class TableComponent implements OnInit{
             ]
         };
     }
+
+
+    public api = [{
+        "Crime_ID": 1,
+        "NID": 2,
+        "c_datetime": "Tue, 04 Nov 2003 22:40:00 GMT",
+        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
+    }, {
+        "Crime_ID": 2,
+        "NID": 1,
+        "c_datetime": "Sat, 15 Feb 2003 14:40:00 GMT",
+        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
+    }, {
+        "Crime_ID": 3,
+        "NID": 2,
+        "c_datetime": "Tue, 01 Apr 2003 15:11:00 GMT",
+        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
+    }, {
+        "Crime_ID": 4,
+        "NID": 4,
+        "c_datetime": "Tue, 01 Jul 2003 14:55:00 GMT",
+        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
+    }, {
+        "Crime_ID": 5,
+        "NID": 4,
+        "c_datetime": "Mon, 20 Jan 2003 11:00:00 GMT",
+        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
+    }, {
+        "Crime_ID": 6,
+        "NID": 5,
+        "c_datetime": "Tue, 25 Feb 2003 21:30:00 GMT",
+        "description": "Theft of Bicycle"
+    }, {
+        "Crime_ID": 7,
+        "NID": 2,
+        "c_datetime": "Thu, 14 Aug 2003 10:20:00 GMT",
+        "description": "Theft of Bicycle"
+    }, {
+        "Crime_ID": 8,
+        "NID": 4,
+        "c_datetime": "Sun, 10 Aug 2003 17:00:00 GMT",
+        "description": "Theft of Vehicle"
+    }, {
+        "Crime_ID": 9,
+        "NID": 5,
+        "c_datetime": "Sun, 10 Aug 2003 17:00:00 GMT",
+        "description": "Theft of Vehicle"
+    }, {
+        "Crime_ID": 10,
+        "NID": 2,
+        "c_datetime": "Thu, 17 Jul 2003 00:00:00 GMT",
+        "description": "Theft of Vehicle"
+    }]
 }

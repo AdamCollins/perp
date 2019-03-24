@@ -21,6 +21,7 @@ import { UpgradeComponent }   from './upgrade/upgrade.component';
 import { AdminComponent } from './admin/admin.component';
 import { PiechartComponent } from './charts/piechart/piechart.component';
 import { TablechartComponent } from './charts/tablechart/tablechart.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { TablechartComponent } from './charts/tablechart/tablechart.component';
     NavbarModule,
     FooterModule,
     FixedPluginModule,
-    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=YOUR_KEY_HERE'})
+    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=YOUR_KEY_HERE'}),
+    HttpClientModule
 
   ],
   providers: [],
