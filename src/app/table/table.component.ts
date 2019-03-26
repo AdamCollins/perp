@@ -15,32 +15,27 @@ export class TableComponent implements OnInit{
 
 
     getCrimeData(){
-        this.http.get('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime').subscribe(data=>{
-            //log api data for crime table
-            console.log(data);
-            // let dataRows = [];
-            // //TODO replace with data param once cors is fixed.
-            // for (let x of this.api) {
-            //     let row = [x.Crime_ID, x.NID, x.c_datetime, x.description];
-            //     dataRows.push(row);
-            // }
-            
 
-            // return {
-            //     title : 'Crimes',
-            //     subtitle: '',
-            //     headerRow : ['ID','Neighbourhood ID', 'Time', 'Description'],
-            //     dataRows : dataRows
-            // }
-        });
     }
 
     ngOnInit(){
+        this.http.get('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime').subscribe(data => {
+            //log api data for crime table
+            let dataRows = [];
+            //TODO replace with data param once cors is fixed.
+            for (let x of this.api) {
+                let row = [x.Crime_ID, x.NID, x.c_datetime, x.description];
+                dataRows.push(row);
+            }
 
-       console.log(this.getCrimeData());
-        // this.tableData1 = this.getCrimeData();
-        // this.crimeData = //this.getCrimeData();
-
+            this.crimeData = {
+                title: 'Crimes',
+                subtitle: '',
+                headerRow: ['ID', 'Neighbourhood ID', 'Time', 'Description'],
+                dataRows: dataRows
+            }
+        });
+        
         this.tableData1 = {
             title:'employees saLarIes',
             subtitle:'Employees salaries by country.',

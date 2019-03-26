@@ -13,7 +13,7 @@ declare var $:any;
 export class DashboardComponent implements OnInit{
     ngOnInit(){
         var dataSales = {
-          labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '9:00PM', '12:00PM', '3:00AM', '6:00AM'],
+          labels: ['2003', '2005', '2007', '2009', '2010', '2012', '2015', '2017'],
           series: [
              [287, 385, 490, 562, 594, 626, 698, 895, 952],
             [67, 152, 193, 240, 387, 435, 535, 642, 744],
@@ -94,6 +94,12 @@ export class DashboardComponent implements OnInit{
                 showGrid: false
             }
         };
+
+        new Chartist.Pie('#chartLang', dataPreferences, optionsPreferences);
+        new Chartist.Pie('#chartLang', {
+          labels: ['62%', '32%', '6%'],
+          series: [62, 32, 6]
+        });
 
         new Chartist.Pie('#chartPreferences', dataPreferences, optionsPreferences);
 

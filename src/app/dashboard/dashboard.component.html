@@ -11,15 +11,20 @@
                             </div>
                             <div class="col-xs-7">
                                 <div class="numbers">
-                                    <p>Capacity</p>
-                                    105GB
+                                    <p>Total Crimes</p>
+                                    12,000
                                 </div>
                             </div>
                         </div>
                         <div class="footer">
                             <hr />
                             <div class="stats">
-                                <i class="ti-reload"></i> Updated now
+                                <i class="ti-calendar"></i>In The last <select
+                                    class="custom-select">
+                                    <option selected>Month</option>
+                                    <option value="1">Year</option>
+                                    <option value="2">All Time</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -36,15 +41,20 @@
                             </div>
                             <div class="col-xs-7">
                                 <div class="numbers">
-                                    <p>Revenue</p>
-                                    $1,345
+                                    <p>Value Of Goods Stolen</p>
+                                    $45,345
                                 </div>
                             </div>
                         </div>
                         <div class="footer">
                             <hr />
                             <div class="stats">
-                                <i class="ti-calendar"></i> Last day
+                                <i class="ti-calendar"></i>In The last <select
+                                  class="custom-select">
+                                  <option selected>Month</option>
+                                  <option value="1">Year</option>
+                                  <option value="2">All Time</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -61,7 +71,7 @@
                             </div>
                             <div class="col-xs-7">
                                 <div class="numbers">
-                                    <p>Errors</p>
+                                    <p>Total Visitors</p>
                                     23
                                 </div>
                             </div>
@@ -69,7 +79,7 @@
                         <div class="footer">
                             <hr />
                             <div class="stats">
-                                <i class="ti-timer"></i> In the last hour
+                                All Time
                             </div>
                         </div>
                     </div>
@@ -86,7 +96,7 @@
                             </div>
                             <div class="col-xs-7">
                                 <div class="numbers">
-                                    <p>Followers</p>
+                                    <p><a href="https://twitter.com/VancouverPD">Report Crime</a></p>
                                     +45
                                 </div>
                             </div>
@@ -106,21 +116,23 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Users Behavior</h4>
-                        <p class="category">24 Hours performance</p>
+                        <h4 class="title">Crime Rate</h4>
+                        <p class="category">Between 2003-2016</p>
                     </div>
                     <div class="content">
                        <!-- //Zac, (2) All the html content for the charts on the dashboard is here -->
                         <div id="chartHours" class="ct-chart"></div>
                         <div class="footer">
                             <div class="chart-legend">
-                                <i class="fa fa-circle text-info"></i> Open
-                                <i class="fa fa-circle text-danger"></i> Click
-                                <i class="fa fa-circle text-warning"></i> Click Second Time
+                                <i class="fa fa-circle text-info"></i> Vehicle Collisions
+                                <i class="fa fa-circle text-danger"></i> Violent Crimes
+                                <i class="fa fa-circle text-warning"></i> Theft
                             </div>
                             <hr>
                             <div class="stats">
-                                <i class="ti-reload"></i> Updated 3 minutes ago
+                                <i class="ti-reload"></i> <a
+                                  href='https://vancouver.ca/your-government/open-data-catalogue.aspx'>From CoV Data
+                                  Catalouge</a>
                             </div>
                         </div>
                     </div>
@@ -131,26 +143,63 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="header">
-                        <h4 class="title">Email Statistics</h4>
-                        <p class="category">Last Campaign Performance</p>
+                        <h4 class="title">Crimes by Neighbourhood</h4>
+                            <select class="custom-select">
+                              <option selected>Point Grey</option>
+                              <option value="1">Point Grey</option>
+                              <option value="2">Kitsilano</option>
+                              <option value="3">Westend</option>
+                            </select>
                     </div>
                     <div class="content">
                         <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
 
                         <div class="footer">
                             <div class="chart-legend">
-                                <i class="fa fa-circle text-info"></i> Open
-                                <i class="fa fa-circle text-danger"></i> Bounce
-                                <i class="fa fa-circle text-warning"></i> Unsubscribe
+                                <i class="fa fa-circle text-info"></i> Vehicle Collisions
+                                <i class="fa fa-circle text-danger"></i> Violent Crimes
+                                <i class="fa fa-circle text-warning"></i> Theft
                             </div>
                             <hr>
                             <div class="stats">
-                                <i class="ti-timer"></i> Campaign sent 2 days ago
+                                <i class="ti-timer"></i> <a
+                                  href='https://vancouver.ca/your-government/open-data-catalogue.aspx'>From CoV Data
+                                  Catalouge</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+             <div class="col-md-6">
+               <div class="card">
+                 <div class="header">
+                   <h4 class="title">Languages by Neighbourhood</h4>
+                   <select class="custom-select">
+                     <option selected>Point Grey</option>
+                     <option value="1">Point Grey</option>
+                     <option value="2">Kitsilano</option>
+                     <option value="3">Westend</option>
+                   </select>
+                 </div>
+                 <div class="content">
+                   <div id="chartLang" class="ct-chart ct-perfect-fourth"></div>
+
+                   <div class="footer">
+                     <div class="chart-legend">
+                       <i class="fa fa-circle text-info"></i> English
+                       <i class="fa fa-circle text-danger"></i> Cantonese
+                       <i class="fa fa-circle text-warning"></i> Mandrin
+                     </div>
+                     <hr>
+                     <div class="stats">
+                       <i class="ti-timer"></i> <a
+                         href='https://vancouver.ca/your-government/open-data-catalogue.aspx'>From CoV Data
+                         Catalouge</a>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
             <div class="col-md-6">
                 <div class="card ">
                     <div class="header">
