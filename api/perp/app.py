@@ -36,6 +36,16 @@ def get_crimes_count():
         return jsonify(str(e)), 400
 
 
+@app.route("/api/v1/theft/total_value", methods=["GET"])
+def get_total_value_of_thefts():
+    client = get_mysql_client()
+    try:
+        result = client.select_total_value_of_thefts()
+        return jsonify(result)
+    except PerpException as e:
+        return jsonify(str(e)), 400
+
+
 @app.route("/api/v1/hello")
 def hello_world():
     return jsonify("hello world !")

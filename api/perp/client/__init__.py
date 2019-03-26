@@ -132,3 +132,14 @@ class MysqlClient:
             having = ""
 
         return self._select(query_string.format(having))
+
+    def select_total_value_of_thefts(self):
+        """
+        Aggregate the total value of items stolen across all thefts.
+        :return: The total value of items stolen.
+        """
+        query_string = """
+        SELECT sum(i_value) total_value
+        FROM StolenItem s JOIN Item i ON s.i_name = i.i_name
+        """
+        return self._select(query_string)[0]
