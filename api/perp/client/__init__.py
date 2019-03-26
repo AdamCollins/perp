@@ -51,6 +51,26 @@ class MysqlClient:
             return False
         return True
 
+    def _select(self, query_string):
+        """
+        Query the database are return all results
+        :param query_string: The query to execute
+        :return: All results
+        """
+        if not self._connect():
+            raise PerpException("Unable to connect to database")
+
+        logging.debug(f"Querying database with query: {query_string}")
+
+        try:
+            with self.connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                cursor.execute(query_string)
+                result = cursor.fetchall()
+        except pymysql.err.DatabaseError as e:
+            logging.error(e)
+            raise PerpException("Error occurred while executing query")
+        return result
+
     def select_all_from_table(
         self,
         table_name,
@@ -64,29 +84,19 @@ class MysqlClient:
         :param num_rows: The number of rows to select
         :return: A list of dicts representing the rows of the result
         """
-
-        if not self._connect():
-            raise PerpException("Unable to connect to database")
-
         query_string = f"SELECT * FROM {table_name}"
         query_string += f" ORDER BY {order_by}" if order_by else ""
         query_string += f" LIMIT {num_rows}" if num_rows else ""
 
-        logging.info(f"Querying database with query: {query_string}")
-
-        try:
-            with self.connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                cursor.execute(query_string)
-                result = cursor.fetchall()
-        except pymysql.err.DatabaseError as e:
-            logging.error(e)
-            raise PerpException("Error occurred while executing query")
-        return result
+        return self._select(query_string)
 
     def select_crime_count_by_year(self, year_from=None, year_to=None):
-        if not self._connect():
-            raise PerpException("Unable to connect to database")
-
+        """
+        Count the number of crimes per year grouped by crime type
+        :param year_from: The start of the range of years
+        :param year_to: The end of the range of years
+        :return: A list of dict results
+        """
         query_string = """
         SELECT allyears.c_year,
             COALESCE(num_collision, 0) AS num_collision,
@@ -121,11 +131,4 @@ class MysqlClient:
         else:
             having = ""
 
-        try:
-            with self.connection.cursor(pymysql.cursors.DictCursor) as cursor:
-                cursor.execute(query_string.format(having))
-                result = cursor.fetchall()
-        except pymysql.err.DatabaseError as e:
-            logging.error(e)
-            raise PerpException("Error occurred while executing query")
-        return result
+        return self._select(query_string.format(having))
