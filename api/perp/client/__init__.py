@@ -71,6 +71,25 @@ class MysqlClient:
             raise PerpException("Error occurred while executing query")
         return result
 
+    def _insert(self, insert_query_string):
+        """
+        Execute the query string
+        :param insert_query_string: The insert query to execute
+        :raises PerpException on any DatabaseError
+        """
+        if not self._connect():
+            raise PerpException("Unable to connect to database")
+
+        logging.debug(f"Querying database with query: {insert_query_string}")
+
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(insert_query_string)
+            self.connection.commit()
+        except pymysql.err.DatabaseError as e:
+            logging.error(e)
+            raise PerpException("Error occurred while executing query")
+
     def select_all_from_table(
         self,
         table_name,
@@ -143,3 +162,29 @@ class MysqlClient:
         FROM StolenItem s JOIN Item i ON s.i_name = i.i_name
         """
         return self._select(query_string)[0]
+
+    def insert_new_criminal(self, age, height_cm, hair_color, lives_in):
+        """
+        Insert a new criminal into the Criminal table
+        :param age: The criminal's height
+        :param height_cm: The criminal's age
+        :param hair_color: The criminal's hair color
+        :param lives_in: The ID of the neighbourhood the criminal lives in
+        :return: The record that has been added
+        """
+        if None in (age, height_cm, hair_color, lives_in):
+            raise PerpException(
+                "All of age, height_cm, hair_color, lives_in must be specified"
+            )
+
+        max_id_query_string = "SELECT max(Criminal_ID) max_id from Criminal"
+        max_id = self._select(max_id_query_string)[0]["max_id"]
+        new_id = max_id + 1
+
+        query_string = "INSERT INTO Criminal VALUES ({}, {}, {}, '{}', {})"
+        self._insert(query_string.format(
+            new_id, age, height_cm, hair_color, lives_in
+        ))
+
+        select_string = f"SELECT * FROM Criminal WHERE Criminal_ID = {new_id}"
+        return self._select(select_string)[0]
