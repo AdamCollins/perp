@@ -52,10 +52,10 @@ class MysqlClient:
         return True
 
     def select_all_from_table(
-            self,
-            table_name,
-            order_by=None,
-            num_rows=None
+        self,
+        table_name,
+        order_by=None,
+        num_rows=None
     ):
         """
         Select all rows from a given table
@@ -77,6 +77,53 @@ class MysqlClient:
         try:
             with self.connection.cursor(pymysql.cursors.DictCursor) as cursor:
                 cursor.execute(query_string)
+                result = cursor.fetchall()
+        except pymysql.err.DatabaseError as e:
+            logging.error(e)
+            raise PerpException("Error occurred while executing query")
+        return result
+
+    def select_crime_count_by_year(self, year_from=None, year_to=None):
+        if not self._connect():
+            raise PerpException("Unable to connect to database")
+
+        query_string = """
+        SELECT allyears.c_year,
+            COALESCE(num_collision, 0) AS num_collision,
+            COALESCE(num_theft, 0) AS num_theft,
+            COALESCE(num_other, 0) AS num_other
+        FROM (
+            SELECT DISTINCT YEAR(c_datetime) AS c_year FROM Crime {}
+        ) allyears LEFT JOIN (
+            SELECT YEAR(c.c_datetime) AS c_year, count(*) AS num_collision
+            FROM Crime c JOIN VehicleCollision vc ON c.Crime_ID = vc.Crime_ID
+            GROUP BY c_year
+        ) collisions ON allyears.c_year = collisions.c_year LEFT JOIN (
+            SELECT YEAR(c.c_datetime) AS c_year, count(*) AS num_theft
+            FROM Crime c JOIN Theft t ON c.Crime_ID = t.Crime_ID
+            GROUP BY c_year
+        ) thefts ON allyears.c_year = thefts.c_year LEFT JOIN (
+            SELECT YEAR(c.c_datetime) AS c_year, count(*) AS num_other
+            FROM Crime c
+            WHERE c.Crime_ID NOT IN (
+                SELECT Crime_ID FROM VehicleCollision
+                UNION
+                SELECT Crime_ID FROM Theft
+            ) GROUP BY c_year
+        ) other ON allyears.c_year = other.c_year
+        ORDER BY allyears.c_year
+        """
+        if year_from:
+            having = f"HAVING c_year >= {year_from}"
+            having += f" AND c_year <= {year_to}" if year_to else ""
+        elif year_to:
+            having = f"HAVING c_year <= {year_to}"
+        else:
+            having = ""
+
+        try:
+            with self.connection.cursor(pymysql.cursors.DictCursor) as cursor:
+                cursor.execute(query_string.format(having))
                 result = cursor.fetchall()
         except pymysql.err.DatabaseError as e:
             logging.error(e)
