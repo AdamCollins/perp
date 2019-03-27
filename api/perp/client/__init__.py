@@ -188,3 +188,35 @@ class MysqlClient:
 
         select_string = f"SELECT * FROM Criminal WHERE Criminal_ID = {new_id}"
         return self._select(select_string)[0]
+
+    def update_criminal(
+            self,
+            criminal_id,
+            age=None,
+            height_cm=None,
+            hair_color=None,
+            lives_in=None
+    ):
+        query_string = "UPDATE Criminal SET {} WHERE Criminal_ID = {}"
+        updates = f"age = {age}, " if age else ""
+        updates += f"height_cm = {height_cm}, " if height_cm else ""
+        updates += f"hair_color = '{hair_color}', " if hair_color else ""
+        updates += f"lives_in = {lives_in}" if lives_in else ""
+        updates = updates.strip(", ")
+
+        if not updates:
+            raise PerpException(
+                "One of age, height_cm, hair_color, lives_in must be specified"
+            )
+
+        self._insert(query_string.format(updates, criminal_id))
+
+        select_string = f"""
+        SELECT * FROM Criminal WHERE Criminal_ID = {criminal_id}
+        """
+        updated_res = self._select(select_string)
+        if len(updated_res) == 0:
+            raise PerpException(
+                f"No Criminal exists with ID = {criminal_id}"
+            )
+        return updated_res[0]
