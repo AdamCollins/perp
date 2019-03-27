@@ -90,22 +90,53 @@ class MysqlClient:
             logging.error(e)
             raise PerpException("Error occurred while executing query")
 
+    def _select_count_from_table(self, table_name):
+        """
+        Return the number of entries in the given table
+        :param table_name: The table of the table to count
+        :return: The number of entries
+        """
+        query_string = f"SELECT count(*) AS num_rows FROM {table_name}"
+        result = self._select(query_string)[0]["num_rows"]
+        return result
+
     def select_all_from_table(
         self,
         table_name,
         order_by=None,
-        num_rows=None
+        num_rows=None,
+        page=None,
+        page_size=None
     ):
         """
         Select all rows from a given table
         :param table_name: The name of the table
         :param order_by: The name of the column to sort by
         :param num_rows: The number of rows to select
+        :param page: The number of the page to select.
+        :param page_size: The number of results per page
         :return: A list of dicts representing the rows of the result
         """
+        if page and num_rows:
+            raise PerpException(
+                "Both page and num_rows cannot be specified"
+            )
+
         query_string = f"SELECT * FROM {table_name}"
         query_string += f" ORDER BY {order_by}" if order_by else ""
         query_string += f" LIMIT {num_rows}" if num_rows else ""
+
+        if page is not None:
+            page = MysqlClient._to_int(page=page)
+            page_size = MysqlClient._to_int(page_size=page_size or 10)
+            page_offset = page_size * page
+
+            total_size = self._select_count_from_table(table_name)
+
+            if (page_offset < 0) or (page_offset >= total_size):
+                raise PerpException(f"Page index {page} out of range")
+
+            query_string += f" LIMIT {page_offset}, {page_size}"
 
         return self._select(query_string)
 
@@ -240,3 +271,12 @@ class MysqlClient:
         query_string = f"DELETE FROM Criminal WHERE Criminal_ID = {criminal_id}"
         self._insert(query_string)
         return {"criminal_deleted": criminal_id}
+
+    @staticmethod
+    def _to_int(**kwargs):
+        key, value = next(iter(kwargs.items()))
+        try:
+            res = int(value)
+        except (ValueError, TypeError):
+            raise PerpException(f"Parameter {key} must be an integer")
+        return res
