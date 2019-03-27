@@ -16,11 +16,13 @@ def get_all_from_table(table_name):
         result = client.select_all_from_table(
             table_name,
             request.args.get("order"),
-            request.args.get("num_rows")
+            request.args.get("num_rows"),
+            request.args.get("page"),
+            request.args.get("page_size")
         )
         return jsonify(result)
     except PerpException as e:
-        return jsonify(str(e)), 400
+        return error_to_json(e), 400
 
 
 @app.route("/api/v1/crimes/count", methods=["GET"])
@@ -33,7 +35,7 @@ def get_crimes_count():
         )
         return jsonify(result)
     except PerpException as e:
-        return jsonify(str(e)), 400
+        return error_to_json(e), 400
 
 
 @app.route("/api/v1/theft/total_value", methods=["GET"])
@@ -43,7 +45,7 @@ def get_total_value_of_thefts():
         result = client.select_total_value_of_thefts()
         return jsonify(result)
     except PerpException as e:
-        return jsonify(str(e)), 400
+        return error_to_json(e), 400
 
 
 @app.route("/api/v1/criminal", methods=["POST"])
@@ -58,7 +60,7 @@ def post_criminal():
         )
         return jsonify(result)
     except PerpException as e:
-        return jsonify(str(e)), 400
+        return error_to_json(e), 400
 
 
 @app.route("/api/v1/criminal/<int:criminal_id>", methods=["PATCH"])
@@ -74,7 +76,7 @@ def patch_criminal(criminal_id):
         )
         return jsonify(result)
     except PerpException as e:
-        return jsonify(str(e)), 400
+        return error_to_json(e), 400
 
 
 @app.route("/api/v1/criminal/<int:criminal_id>", methods=["DELETE"])
@@ -84,12 +86,17 @@ def delete_criminal(criminal_id):
         result = client.delete_criminal(criminal_id)
         return jsonify(result)
     except PerpException as e:
-        return jsonify(str(e)), 400
+        return error_to_json(e), 400
 
 
 @app.route("/api/v1/hello")
 def hello_world():
     return jsonify("hello world !")
+
+
+def error_to_json(error):
+    error_dict = {"error": str(error)}
+    return jsonify(error_dict)
 
 
 if __name__ == '__main__':
