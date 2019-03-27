@@ -10,3 +10,4 @@ AUTHORS
 ChangeLog
 .pytest_cache/
 __pycache__/
+*/scripts/
