@@ -77,6 +77,16 @@ def patch_criminal(criminal_id):
         return jsonify(str(e)), 400
 
 
+@app.route("/api/v1/criminal/<int:criminal_id>", methods=["DELETE"])
+def delete_criminal(criminal_id):
+    client = get_mysql_client()
+    try:
+        result = client.delete_criminal(criminal_id)
+        return jsonify(result)
+    except PerpException as e:
+        return jsonify(str(e)), 400
+
+
 @app.route("/api/v1/hello")
 def hello_world():
     return jsonify("hello world !")

@@ -197,6 +197,15 @@ class MysqlClient:
             hair_color=None,
             lives_in=None
     ):
+        """
+        Update the criminal that has criminal_id
+        :param criminal_id: The id of the criminal to update
+        :param age: The age to update to
+        :param height_cm: The height to update to
+        :param hair_color: The hair color to update to
+        :param lives_in: The Neighbourhood ID to update to
+        :return: A dict of the updated tuple
+        """
         query_string = "UPDATE Criminal SET {} WHERE Criminal_ID = {}"
         updates = f"age = {age}, " if age else ""
         updates += f"height_cm = {height_cm}, " if height_cm else ""
@@ -220,3 +229,14 @@ class MysqlClient:
                 f"No Criminal exists with ID = {criminal_id}"
             )
         return updated_res[0]
+
+    def delete_criminal(self, criminal_id):
+        """
+        Delete the criminal with criminal_id.
+        :param criminal_id: The ID to delete
+        :return: A dict of the ID that was deleted.
+        Will not check that something is actually deleted.
+        """
+        query_string = f"DELETE FROM Criminal WHERE Criminal_ID = {criminal_id}"
+        self._insert(query_string)
+        return {"criminal_deleted": criminal_id}
