@@ -11,6 +11,7 @@ echo Starting gnunicorn processes
 exec gunicorn perp.app:app \
     -b unix:/tmp/gunicorn.sock \
     --workers 3 \
+    --timeout 120 \
     --log-level=info \
     --log-file=logs/gunicorn.log \
     --access-logfile=logs/access.log &
