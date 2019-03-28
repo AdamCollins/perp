@@ -132,48 +132,48 @@ class MysqlClient:
 
         return self._select(query_string)
 
-    def select_crime_count_by_year(self, year_from=None, year_to=None):
+    def select_crime_count_by_month(self, month_from=None, month_to=None):
         """
         Count the number of crimes per year grouped by crime type
-        :param year_from: The start of the range of years
-        :param year_to: The end of the range of years
+        :param month_from: The start of the range of months
+        :param month_to: The end of the range of months
         :return: A list of dict results
         """
         query_string = """
-        SELECT allyears.c_year,
+        SELECT allmonths.c_month,
             COALESCE(num_collision, 0) AS num_collision,
             COALESCE(num_theft, 0) AS num_theft,
             COALESCE(num_other, 0) AS num_other
         FROM (
-            SELECT DISTINCT YEAR(c_datetime) AS c_year FROM Crime {}
-        ) allyears LEFT JOIN (
-            SELECT YEAR(c.c_datetime) AS c_year, count(*) AS num_collision
+            SELECT DISTINCT MONTH(c_datetime) AS c_month FROM Crime
+        ) allmonths LEFT JOIN (
+            SELECT MONTH(c.c_datetime) AS c_month, count(*) AS num_collision
             FROM Crime c JOIN VehicleCollision vc ON c.Crime_ID = vc.Crime_ID
-            GROUP BY c_year
-        ) collisions ON allyears.c_year = collisions.c_year LEFT JOIN (
-            SELECT YEAR(c.c_datetime) AS c_year, count(*) AS num_theft
+            GROUP BY c_month
+        ) collisions ON allmonths.c_month = collisions.c_month LEFT JOIN (
+            SELECT MONTH(c.c_datetime) AS c_month, count(*) AS num_theft
             FROM Crime c JOIN Theft t ON c.Crime_ID = t.Crime_ID
-            GROUP BY c_year
-        ) thefts ON allyears.c_year = thefts.c_year LEFT JOIN (
-            SELECT YEAR(c.c_datetime) AS c_year, count(*) AS num_other
+            GROUP BY c_month
+        ) thefts ON allmonths.c_month = thefts.c_month LEFT JOIN (
+            SELECT MONTH(c.c_datetime) AS c_month, count(*) AS num_other
             FROM Crime c
             WHERE c.Crime_ID NOT IN (
                 SELECT Crime_ID FROM VehicleCollision
                 UNION
                 SELECT Crime_ID FROM Theft
-            ) GROUP BY c_year
-        ) other ON allyears.c_year = other.c_year
-        ORDER BY allyears.c_year
+            ) GROUP BY c_month
+        ) other ON allmonths.c_month = other.c_month {}
+        ORDER BY allmonths.c_month
         """
-        if year_from:
-            having = f"WHERE c_year >= {year_from}"
-            having += f" AND c_year <= {year_to}" if year_to else ""
-        elif year_to:
-            having = f"WHERE c_year <= {year_to}"
+        if month_from:
+            where = f"WHERE allmonths.c_month >= {month_from}"
+            where += f" AND allmonths.c_month <= {month_to}" if month_to else ""
+        elif month_to:
+            where = f"WHERE allmonths.c_month <= {month_to}"
         else:
-            having = ""
+            where = ""
 
-        return self._select(query_string.format(having))
+        return self._select(query_string.format(where))
 
     def select_total_value_of_thefts(self):
         """

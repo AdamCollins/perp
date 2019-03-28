@@ -29,9 +29,9 @@ def get_all_from_table(table_name):
 def get_crimes_count():
     client = get_mysql_client()
     try:
-        result = client.select_crime_count_by_year(
-            request.args.get("year_from"),
-            request.args.get("year_to")
+        result = client.select_crime_count_by_month(
+            request.args.get("month_from"),
+            request.args.get("month_to")
         )
         return jsonify(result)
     except PerpException as e:
