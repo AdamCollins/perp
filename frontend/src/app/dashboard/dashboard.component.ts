@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import * as Chartist from 'chartist';
 import { TableData } from '../models/table-data';
 import { PieData } from '../models/pie-data';
+import { HeatMap} from '../models/heat-map';
 
 
 declare var $:any;
