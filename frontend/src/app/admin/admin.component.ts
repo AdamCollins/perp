@@ -1,7 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import * as Chartist from 'chartist';
 import { PieData } from '../models/pie-data';
 
+declare var $: any;
+
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json'
+  })
+};
 
 @Component({
   selector: 'app-admin',
@@ -12,8 +22,47 @@ export class AdminComponent implements OnInit {
   usersActive:number;
   usersTotal:number;
   neighbourhoods = ['Arbutus-Ridge', 'Downtown', 'Dunbar-Southlands', 'Fairview', 'Grandview-Woodland', 'Hastings-Sunrise', 'Kensington-Cedar Cottage', 'Kerrisdale', 'Killarney', 'Kitsilano', 'Marpole', 'Mount Pleasant', 'Oakridge', 'Renfrew-Collingwood', 'Riley Park', 'Shaughnessy', 'South Cambie', 'Strathcona', 'Sunset', 'Victoria-Fraserview', 'West End'];
-
   pie:PieData;
+  posturl = "localost:5555/form";
+  
+  constructor(private http : HttpClient){}
+
+
+
+  handleAdd(form: any){
+    console.log('handled');
+    let msg = 'Incorrect username or password';
+    let status = 'danger';
+    let icon = 'ti-thumb-down';
+      if(form.password == 'thebeesknees'){
+      const item: Object = {
+        name: form.name,
+        neighbourhood: form.neighbourhood,  
+        age: form.age,  
+        height: form.height,
+        cid: form.cid,
+        update: form.update
+      }
+
+        console.log(this.http.post<Object>(this.posturl, item, httpOptions));
+
+
+      msg = 'Success!';
+      status = 'success';
+      icon = 'ti-thumb-up';  
+    }
+    $.notify({
+      icon: icon,
+      message: msg
+    }, {
+        type: status,
+        timer: 4000,
+        placement: {
+          from: 'top',
+          align: 'right'
+        }
+      });
+  }
 
 
   ngOnInit() {

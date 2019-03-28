@@ -88,40 +88,21 @@
           <h4 class="title">Add Criminal</h4>
         </div>
         <div class="content">
-          <form>
-            <div class="row">
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label>Name</label>
-                  <input type="text" class="form-control border-input" placeholder="Criminal's Name"
-                    value="Creative Code Inc.">
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>Username</label>
-                  <input type="text" class="form-control border-input" placeholder="Username" value="michael23">
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control border-input" placeholder="Email">
-                </div>
-              </div>
-            </div>
-
+          <form
+            (ngSubmit)="handleAdd(criminalForm.value)"
+            #criminalForm="ngForm"
+          >
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Name</label>
-                  <input type="text" class="form-control border-input" placeholder="Criminal's Name" value="">
+                  <input type="text" name="name" class="form-control border-input" placeholder="Criminal's Name" ngModel>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Neighbourhood</label><br />
-                  <select class="custom-select form-control border-input">
+                  <select name="neighbourhood" class="custom-select form-control border-input" ngModel>
                     <option value="-1">NA</option>
                     <option *ngFor="let n of neighbourhoods; let i = index" value={{i+3}}>{{n}}</option>
                   </select>
@@ -133,18 +114,42 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>Age</label>
-                <input type="number" class="form-control border-input" placeholder="Age">
+                <input type="number" name="age" class="form-control border-input" placeholder="Age" ngModel>
               </div>
             </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Height (cm)</label>
-                  <input type="number" class="form-control border-input" placeholder="Height (cm)">
+                  <input type="number" name="height" class="form-control border-input" placeholder="Height (cm)" ngModel>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>Admin Username</label>
+                  <input type="text" name="username" class="form-control border-input" placeholder="username" ngModel>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Admin Password</label>
+                  <input type="password" name="password" class="form-control border-input" ngModel>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Criminal ID(Update Only)</label>
+                  <input type="number" name="cid" class="form-control border-input" ngModel>
                 </div>
               </div>
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-info btn-fill btn-wd">Update Profile</button>
+                <div class="form-check">
+                  <label class="form-check-label" >Update</label>
+                  <input type="checkbox" name="update" class="form-check-input orm-control border-input" ngModel>
+                </div>
+              <button type="submit" class="btn btn-info btn-fill btn-wd">Add/Update Criminal</button>
             </div>
             <div class="clearfix"></div>
           </form>
