@@ -48,6 +48,16 @@ def get_total_value_of_thefts():
         return error_to_json(e), 400
 
 
+@app.route("/api/v1/theft/car/all", methods=["GET"])
+def get_neighbourhoods_where_all_car_stolen():
+    client = get_mysql_client()
+    try:
+        result = client.select_neighbourhoods_where_all_car_stolen()
+        return jsonify(result)
+    except PerpException as e:
+        return error_to_json(e), 400
+
+
 @app.route("/api/v1/criminal", methods=["POST"])
 def post_criminal():
     client = get_mysql_client()
@@ -84,6 +94,20 @@ def delete_criminal(criminal_id):
     client = get_mysql_client()
     try:
         result = client.delete_criminal(criminal_id)
+        return jsonify(result)
+    except PerpException as e:
+        return error_to_json(e), 400
+
+
+@app.route("/api/v1/criminal/column/<column_name>")
+def get_column_from_criminal(column_name):
+    client = get_mysql_client()
+    try:
+        result = client.select_column_from_criminal(
+            column_name,
+            request.args.get("page"),
+            request.args.get("page_size")
+        )
         return jsonify(result)
     except PerpException as e:
         return error_to_json(e), 400

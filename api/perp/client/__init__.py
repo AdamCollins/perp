@@ -101,12 +101,12 @@ class MysqlClient:
         return result
 
     def select_all_from_table(
-        self,
-        table_name,
-        order_by=None,
-        num_rows=None,
-        page=None,
-        page_size=None
+            self,
+            table_name,
+            order_by=None,
+            num_rows=None,
+            page=None,
+            page_size=None
     ):
         """
         Select all rows from a given table
@@ -125,18 +125,10 @@ class MysqlClient:
         query_string = f"SELECT * FROM {table_name}"
         query_string += f" ORDER BY {order_by}" if order_by else ""
         query_string += f" LIMIT {num_rows}" if num_rows else ""
-
         if page is not None:
-            page = MysqlClient._to_int(page=page)
-            page_size = MysqlClient._to_int(page_size=page_size or 10)
-            page_offset = page_size * page
-
-            total_size = self._select_count_from_table(table_name)
-
-            if (page_offset < 0) or (page_offset >= total_size):
-                raise PerpException(f"Page index {page} out of range")
-
-            query_string += f" LIMIT {page_offset}, {page_size}"
+            query_string += self._get_page_limit_string(
+                page, page_size, table_name
+            )
 
         return self._select(query_string)
 
@@ -174,10 +166,10 @@ class MysqlClient:
         ORDER BY allyears.c_year
         """
         if year_from:
-            having = f"HAVING c_year >= {year_from}"
+            having = f"WHERE c_year >= {year_from}"
             having += f" AND c_year <= {year_to}" if year_to else ""
         elif year_to:
-            having = f"HAVING c_year <= {year_to}"
+            having = f"WHERE c_year <= {year_to}"
         else:
             having = ""
 
@@ -271,6 +263,55 @@ class MysqlClient:
         query_string = f"DELETE FROM Criminal WHERE Criminal_ID = {criminal_id}"
         self._insert(query_string)
         return {"criminal_deleted": criminal_id}
+
+    @lru_cache(maxsize=1)
+    def select_neighbourhoods_where_all_car_stolen(self):
+        """
+        Select the neighbourhood from which all cars have been stolen.
+        :return: A list of neighbourhoods
+        """
+        query_string = """
+        SELECT n.n_name 
+        FROM Neighbourhood n
+        WHERE NOT EXISTS (
+            SELECT DISTINCT s1.i_name 
+            FROM StolenItem s1 JOIN Theft t ON t.Crime_ID = s1.Crime_ID
+            WHERE t.theft_type LIKE "%Vehicle%" 
+            AND NOT EXISTS (
+                SELECT * 
+                FROM Theft t
+                JOIN Crime c ON t.Crime_ID = c.Crime_ID
+                JOIN StolenItem s2 ON t.Crime_ID = s2.Crime_ID
+                WHERE c.NID = n.NID AND s1.i_name = s2.i_name
+            )
+        )
+        """
+        return self._select(query_string)
+
+    def select_column_from_criminal(self, column_name, page, page_size):
+        """
+        Select a given column from the criminal table.
+        :param column_name: The name of the column to select
+        :param page: The number of the page to select.
+        :param page_size: The number of results per page
+        :return: A list of dicts of the results
+        """
+        query_string = f"SELECT {column_name} FROM Criminal"
+        if page is not None:
+            query_string += self._get_page_limit_string(
+                page, page_size, "Criminal"
+            )
+        return self._select(query_string)
+
+    def _get_page_limit_string(self, page, page_size, table_name):
+        page = MysqlClient._to_int(page=page)
+        page_size = MysqlClient._to_int(page_size=page_size or 10)
+        page_offset = page_size * page
+        total_size = self._select_count_from_table(table_name)
+        if (page_offset < 0) or (page_offset >= total_size):
+            raise PerpException(f"Page index {page} out of range")
+        limit_string = f" LIMIT {page_offset}, {page_size}"
+        return limit_string
 
     @staticmethod
     def _to_int(**kwargs):
