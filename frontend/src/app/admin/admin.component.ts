@@ -11,6 +11,7 @@ export class AdminComponent implements OnInit {
 
   usersActive:number;
   usersTotal:number;
+  neighbourhoods = ['Arbutus-Ridge', 'Downtown', 'Dunbar-Southlands', 'Fairview', 'Grandview-Woodland', 'Hastings-Sunrise', 'Kensington-Cedar Cottage', 'Kerrisdale', 'Killarney', 'Kitsilano', 'Marpole', 'Mount Pleasant', 'Oakridge', 'Renfrew-Collingwood', 'Riley Park', 'Shaughnessy', 'South Cambie', 'Strathcona', 'Sunset', 'Victoria-Fraserview', 'West End'];
 
   pie:PieData;
 
@@ -53,6 +54,9 @@ export class AdminComponent implements OnInit {
     ];
 
     new Chartist.Line('#chartHours', dataSales, optionsSales, responsiveSales);
+
+
+    
 
 
     var data = {

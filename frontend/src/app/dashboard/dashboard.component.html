@@ -21,9 +21,19 @@
                             <div class="stats">
                                 <i class="ti-calendar"></i>In The last <select
                                     class="custom-select">
-                                    <option selected>Month</option>
-                                    <option value="1">Year</option>
-                                    <option value="2">All Time</option>
+                                  <option selected>All Time</option>
+                                  <option value="1">Jan</option>
+                                  <option value="2">Feb</option>
+                                  <option value="2">Mar</option>
+                                  <option value="2">Apr</option>
+                                  <option value="2">May</option>
+                                  <option value="2">Jun</option>
+                                  <option value="2">Jul</option>
+                                  <option value="2">Aug</option>
+                                  <option value="2">Sept</option>
+                                  <option value="2">Oct</option>
+                                  <option value="2">Nov</option>
+                                  <option value="2">Dec</option>
                                 </select>
                             </div>
                         </div>
@@ -51,9 +61,20 @@
                             <div class="stats">
                                 <i class="ti-calendar"></i>In The last <select
                                   class="custom-select">
-                                  <option selected>Month</option>
-                                  <option value="1">Year</option>
-                                  <option value="2">All Time</option>
+                                  <option selected>All Time</option>
+                                  <option value="1">Jan</option>
+                                  <option value="2">Feb</option>
+                                  <option value="2">Mar</option>
+                                  <option value="2">Apr</option>
+                                  <option value="2">May</option>
+                                  <option value="2">Jun</option>
+                                  <option value="2">Jul</option>
+                                  <option value="2">Aug</option>
+                                  <option value="2">Sept</option>
+                                  <option value="2">Oct</option>
+                                  <option value="2">Nov</option>
+                                  <option value="2">Dec</option>
+                                
                                 </select>
                             </div>
                         </div>
@@ -114,7 +135,7 @@
         <div class="row">
 
             <div class="col-md-12">
-                <div class="card">
+                <div class="card" >
                     <div class="header">
                         <h4 class="title">Crime Rate</h4>
                         <p class="category">Between 2003-2016</p>
@@ -124,9 +145,9 @@
                         <div id="chartHours" class="ct-chart"></div>
                         <div class="footer">
                             <div class="chart-legend">
-                                <i class="fa fa-circle text-info"></i> Vehicle Collisions
-                                <i class="fa fa-circle text-danger"></i> Violent Crimes
-                                <i class="fa fa-circle text-warning"></i> Theft
+                                <i class="fa fa-circle text-info"></i> Theft
+                                <i class="fa fa-circle text-danger"></i> Other Crimes
+                                <i class="fa fa-circle text-warning"></i> Vehicle Collisions
                             </div>
                             <hr>
                             <div class="stats">
@@ -141,66 +162,44 @@
         </div>
         <!-- starts and shit -->
         <div class="row">
-            <div class="col-md-6">
-                <div class="card ">
-                <div class="header">
-                    <h4 class="title">{{'Dont park your car here' | titlecase}}</h4>
-                    <p class="category">These neighbourhoods have had every kind of car stolen in them</p>
-                </div>
-                <div class="content">
-                    <ul>
-                    <li *ngFor="let n of allCarsStolen">
-                        <h5>{{n}}</h5>
-                    </li>
-                    </ul>
-                </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-            <div class="card ">
-                <div class="header">
-                    <h4 class="title">{{'Search for Criminal' | titlecase}}</h4>
-                    <p class="category">Search for criminals by name</p>
-                </div>
-                <div class="criminal-search">
-                 <input type="text" placeholder="Search...">
-                 
-                </div>
-            </div>
+            <div class="col-md-12" *ngIf="carsLoaded">
+                <app-tablechart [size]="3" [data]="allCarsStolen"></app-tablechart>
             </div>
         </div>
         <!-- Pie charts -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="header">
-                        <h4 class="title">Crimes by Neighbourhood</h4>
-                            <select class="custom-select">
-                              <option selected>Point Grey</option>
-                              <option value="1">Point Grey</option>
-                              <option value="2">Kitsilano</option>
-                              <option value="3">Westend</option>
-                            </select>
-                    </div>
-                    <div class="content">
-                        <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
 
-                        <div class="footer">
-                            <div class="chart-legend">
-                                <i class="fa fa-circle text-info"></i> Vehicle Collisions
-                                <i class="fa fa-circle text-danger"></i> Violent Crimes
-                                <i class="fa fa-circle text-warning"></i> Theft
+        <div class="row">
+                        <div class="col-md-6">
+                          <div class="card">
+                            <div class="header">
+                              <h4 class="title">Crimes by Neighbourhood</h4>
+                              <select class="custom-select">
+                                <option selected>Point Grey</option>
+                                <option value="1">Point Grey</option>
+                                <option value="2">Kitsilano</option>
+                                <option value="3">Westend</option>
+                              </select>
                             </div>
-                            <hr>
-                            <div class="stats">
-                                <i class="ti-timer"></i> <a
-                                  href='https://vancouver.ca/your-government/open-data-catalogue.aspx'>From CoV Data
-                                  Catalouge</a>
+                            <div class="content">
+                                <h5>Loading...</h5>
+                                
+                              <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                              <div class="footer">
+                                <div class="chart-legend">
+                                  <i class="fa fa-circle text-info"></i> Vehicle Collisions
+                                  <i class="fa fa-circle text-danger"></i> Violent Crimes
+                                  <i class="fa fa-circle text-warning"></i> Theft
+                                </div>
+                                <hr>
+                                <div class="stats">
+                                  <i class="ti-timer"></i> <a
+                                    href='https://vancouver.ca/your-government/open-data-catalogue.aspx'>From CoV Data
+                                    Catalouge</a>
+                                </div>
+                              </div>
                             </div>
+                          </div>
                         </div>
-                    </div>
-                </div>
-            </div>
              <div class="col-md-6">
                <div class="card">
                  <div class="header">

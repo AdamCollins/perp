@@ -68,23 +68,27 @@ export class TableComponent implements OnInit{
             }
             this.criminalLoaded = true;
         }, err => { console.log(err) });
-
+        let l = "";
         //Neighbourhood
         this.http.get<any []>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Neighbourhood').subscribe((data) => {
             //log api data for crime table
             let dataRows = [];
             //TODO replace with data param once cors is fixed.
+
             for (let x of data) {
                 let row = [x.n_name, x.NID, x.DID];
                 dataRows.push(row);
+                l += '\'' + x.n_name + '\'' + ",";
             }
-
+            console.log(l);
+            
             this.neighbourhoodData = {
                 title: 'Neighbourhood',
                 subtitle: '',
                 headerRow: ['Name', 'Neighbourhood ID', 'Demographic ID'],
                 dataRows: dataRows
             }
+            
             this.neighLoaded = true;
         }, err => { console.log(err) });
     }
