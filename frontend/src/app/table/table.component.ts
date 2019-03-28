@@ -10,7 +10,14 @@ import { HttpClient } from '@angular/common/http'
 
 export class TableComponent implements OnInit{
     public tableData1: TableData;
-    public crimeData: TableData;
+    crimeData: TableData;
+    criminalData: TableData;
+    neighbourhoodData: TableData;
+    neighLoaded:Boolean;
+    crimeLoaded: Boolean;
+    criminalLoaded: Boolean;
+
+
     constructor(private http: HttpClient){}
 
 
@@ -19,11 +26,15 @@ export class TableComponent implements OnInit{
     }
 
     ngOnInit(){
-        this.http.get('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime').subscribe(data => {
+
+        //Crime
+        this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime?page_size=50&page=0').subscribe((data)=> {
             //log api data for crime table
             let dataRows = [];
+            console.log(data);
+            
             //TODO replace with data param once cors is fixed.
-            for (let x of this.api) {
+            for (let x of data) {
                 let row = [x.Crime_ID, x.NID, x.c_datetime, x.description];
                 dataRows.push(row);
             }
@@ -34,27 +45,48 @@ export class TableComponent implements OnInit{
                 headerRow: ['ID', 'Neighbourhood ID', 'Time', 'Description'],
                 dataRows: dataRows
             }
-        });
-        
-        this.tableData1 = {
-            title:'employees saLarIes',
-            subtitle:'Employees salaries by country.',
-            headerRow: [ 'ID', 'Name', 'Country', 'City', 'Salary'],
-            dataRows: [
-                ['1', 'Dakota Rice', 'Niger', 'Oud-Turnhout', '$36,738'],
-                ['2', 'Minerva Hooper', 'Curaçao', 'Sinaai-Waas', '$23,789'],
-                ['3', 'Sage Rodriguez', 'Netherlands', 'Baileux', '$56,142'],
-                ['4', 'Philip Chaney', 'Korea, South', 'Overland Park', '$38,735'],
-                ['5', 'Doris Greene', 'Malawi', 'Feldkirchen in Kärnten', '$63,542'],
-                ['6', 'Mason Porter', 'Chile', 'Gloucester', '$78,615'], 
-                ['1', 'Dakota Rice', 'Niger', 'Oud-Turnhout', '$36,738'],
-                ['2', 'Minerva Hooper', 'Curaçao', 'Sinaai-Waas', '$23,789'],
-                ['3', 'Sage Rodriguez', 'Netherlands', 'Baileux', '$56,142'],
-                ['4', 'Philip Chaney', 'Korea, South', 'Overland Park', '$38,735'],
-                ['5', 'Doris Greene', 'Malawi', 'Feldkirchen in Kärnten', '$63,542'],
-                ['6', 'Mason Porter', 'Chile', 'Gloucester', '$78,615']
-            ]
-        };
+            this.crimeLoaded = true;
+        }, err => {console.log(err)});
+
+        //TODO Criminals
+        this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Criminal?page_size=50&page=0').subscribe((data) => {
+            //log api data for crime table
+            let dataRows = [];
+            console.log(data);
+
+            //TODO replace with data param once cors is fixed.
+            for (let x of data) {
+                let row = [x.Criminal_ID, x.age, x.hair_color, x.height_cm, x.lives_in];
+                dataRows.push(row);
+            }
+
+            this.criminalData = {
+                title: 'Criminals',
+                subtitle: '',
+                headerRow: ['ID', 'Age', 'Hair Colour', 'Height(cm)', 'Neighbourhood (NID)'],
+                dataRows: dataRows
+            }
+            this.criminalLoaded = true;
+        }, err => { console.log(err) });
+
+        //Neighbourhood
+        this.http.get<any []>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Neighbourhood').subscribe((data) => {
+            //log api data for crime table
+            let dataRows = [];
+            //TODO replace with data param once cors is fixed.
+            for (let x of data) {
+                let row = [x.n_name, x.NID, x.DID];
+                dataRows.push(row);
+            }
+
+            this.neighbourhoodData = {
+                title: 'Neighbourhood',
+                subtitle: '',
+                headerRow: ['Name', 'Neighbourhood ID', 'Demographic ID'],
+                dataRows: dataRows
+            }
+            this.neighLoaded = true;
+        }, err => { console.log(err) });
     }
 
 

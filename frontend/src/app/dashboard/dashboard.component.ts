@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import * as Chartist from 'chartist';
+import { TableData } from '../models/table-data';
 
 declare var $:any;
-
 @Component({
     selector: 'dashboard-cmp',
     moduleId: module.id,
@@ -11,7 +12,38 @@ declare var $:any;
 
 //Zac, (1) data is loaded here to be used on charts in dashboard.components.html 
 export class DashboardComponent implements OnInit{
+    private numCrimes;
+    //TODO
+    private allCarsStolen: string[];
+
+    constructor(private http: HttpClient){}
+
+
     ngOnInit(){
+
+      //load crime count
+      this.http.get<any>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/crimes/count?year_from=2000&year_to=2019').subscribe(data=>{
+        data = data[0];
+        this.numCrimes = data.num_collision+data.num_other+data.num_theft;
+        console.log(data);
+      });
+
+      //load neighbourhoods where all cars stolen
+      this.allCarsStolen = ['East Vancouver', 'Point Grey', 'West End'];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         var dataSales = {
           labels: ['2003', '2005', '2007', '2009', '2010', '2012', '2015', '2017'],
           series: [
