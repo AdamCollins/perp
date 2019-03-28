@@ -4,7 +4,9 @@ import * as Chartist from 'chartist';
 import { TableData } from '../models/table-data';
 import { PieData } from '../models/pie-data';
 
+
 declare var $:any;
+const str = (n) => '' + n;
 @Component({
     selector: 'dashboard-cmp',
     moduleId: module.id,
@@ -13,23 +15,31 @@ declare var $:any;
 
 //Zac, (1) data is loaded here to be used on charts in dashboard.components.html 
 export class DashboardComponent implements OnInit{
-    private numCrimes;
-    //TODO
+    private numCrimes = [0];
+    private index = 0;
+    private sumOfStolen: number;
     private allCarsStolen: TableData;
     private carsLoaded = false;
-    private pie: PieData
+    private pie: PieData;
 
     constructor(private http: HttpClient){}
 
 
+    crimeSelectChange(month : number){
+      this.index = month;
+      console.log('called');
+    }
+
+    
+
     ngOnInit(){
 
       //load crime count
-      this.http.get<any>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/crimes/count?year_from=2000&year_to=2019').subscribe(data=>{
-        data = data[0];
-        this.numCrimes = data.num_collision+data.num_other+data.num_theft;
-        console.log(data);
-      });
+`      // this.http.get<any>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/crimes/count?year_from=2000&year_to=2019').subscribe(data=>{
+      //   data = data[0];
+      //   this.numCrimes = data.num_collision+data.num_other+data.num_theft;
+      //   console.log(data);
+      // });`
 
       //load neighbourhoods where all cars stolen
         //http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/theft/car/all
@@ -79,14 +89,41 @@ export class DashboardComponent implements OnInit{
           colli.push(x.num_collision);
           theft.push(x.num_theft);
           other.push(x.num_other);
+
+          //build month map
+          this.numCrimes.push(x.num_collision + x.num_theft + x.num_other);
         }
         dataSales.series = [theft, other, colli];
-
         new Chartist.Line('#chartHours', dataSales, optionsSales, responsiveSales);
+
+        this.numCrimes[0] = (colli.concat(theft,other)).reduce((acc, n)=>acc+n);
+        let crime_percentages = 
+          {
+            collisions: colli.reduce((acc,n)=>acc+n)/this.numCrimes[0],
+            theft: theft.reduce((acc, n) => acc + n) / this.numCrimes[0],
+            other: other.reduce((acc, n) => acc + n) / this.numCrimes[0],
+          }
+
+        new Chartist.Pie('#chartPreferences', dataPreferences, optionsPreferences);
+
+        new Chartist.Pie('#chartPreferences', {
+          labels: [Math.round(crime_percentages.theft * 100) + '%', 
+                  Math.round(crime_percentages.other* 100) + '%',
+                  Math.round(crime_percentages.collisions*100) + '%'],
+          series: [crime_percentages.theft, crime_percentages.other, crime_percentages.collisions,]
+        });
       });
 
 
-
+      //Stolen Item
+      this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Item').subscribe((data) => {
+        //log api data for crime table
+        let sum = 0;
+        for (let x of data){
+          sum += x.i_value;
+        }
+        this.sumOfStolen = sum;
+      }, err => { console.log(err) });
 
 
 
@@ -143,11 +180,6 @@ export class DashboardComponent implements OnInit{
           series: [62, 32, 6]
         });
 
-        new Chartist.Pie('#chartPreferences', dataPreferences, optionsPreferences);
 
-        new Chartist.Pie('#chartPreferences', {
-          labels: ['62%','32%','6%'],
-          series: [62, 32, 6]
-        });
     }
 }

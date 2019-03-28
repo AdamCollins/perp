@@ -5,15 +5,16 @@
             <app-tablechart [data]="crimeData"></app-tablechart>
         </div>
 
-        <!-- <div class="col-md-12" *ngIf="isLoaded">
+        <div class="col-md-12" *ngIf="criminalLoaded">
             <app-tablechart [data]="criminalData"></app-tablechart>
-        </div>-->
+        </div>
 
         <div class="col-md-12" *ngIf="neighLoaded">
           <app-tablechart [data]="neighbourhoodData"></app-tablechart>
         </div> 
-        <div class="col-md-12" *ngIf="criminalLoaded">
-            <app-tablechart [data]="criminalData"></app-tablechart>
+
+        <div class="col-md-12" *ngIf="demosLoaded">
+            <app-tablechart [data]="demoData"></app-tablechart>
         </div>
     </div>
 </div>
