@@ -7,7 +7,7 @@ RUN apt-get update
 RUN apt-get install -y nginx
 
 COPY api /src
-COPY dist /dist
+COPY frontend/dist /dist
 COPY ./docker-entrypoint.sh /
 COPY .git /
 
