@@ -1,5 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { TableData } from 'app/models/table-data';
+import {
+  Component,
+  OnInit,
+  Input
+} from '@angular/core';
+import {
+  TableData
+} from 'app/models/table-data';
 
 @Component({
   selector: 'app-tablechart',
@@ -8,23 +14,26 @@ import { TableData } from 'app/models/table-data';
 export class TablechartComponent implements OnInit {
   public pages = [];
   public pageIndex = 0;
-  private pageSize = 10;
-  nextPage(i){
-    this.pageIndex+=i
+  public pageSize = 10;
+  private isLoaded = false;
+  nextPage(i) {
+    this.pageIndex += i
   }
-  goToPage(i){
+  goToPage(i) {
     this.pageIndex = i
     console.log(i);
   }
-  constructor() { }
+  constructor() {}
   @Input() data: TableData;
+  @Input() size: number;
   ngOnInit() {
-    let rows = this.data.dataRows.slice();
-    while(rows.length>0){
-      let page = rows.splice(0, this.pageSize);
-      this.pages.push(page);
+    if (this.size) {
+      this.pageSize = this.size;
     }
-    console.log(this.pages);
+      let rows = this.data.dataRows.slice();
+      while (rows.length > 0) {
+        let page = rows.splice(0, this.pageSize);
+        this.pages.push(page);
+      }
   }
-
 }

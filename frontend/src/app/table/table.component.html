@@ -1,12 +1,20 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="crimeLoaded">
             <app-tablechart [data]="crimeData"></app-tablechart>
         </div>
 
-        <!-- <div class="col-md-12">
-            <app-tablechart [data]="tableData1"></app-tablechart>
-        </div> -->
+        <div class="col-md-12" *ngIf="criminalLoaded">
+            <app-tablechart [data]="criminalData"></app-tablechart>
+        </div>
+
+        <div class="col-md-12" *ngIf="neighLoaded">
+          <app-tablechart [data]="neighbourhoodData"></app-tablechart>
+        </div> 
+
+        <div class="col-md-12" *ngIf="demosLoaded">
+            <app-tablechart [data]="demoData"></app-tablechart>
+        </div>
     </div>
 </div>

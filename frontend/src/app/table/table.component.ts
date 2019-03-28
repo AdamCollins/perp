@@ -10,7 +10,18 @@ import { HttpClient } from '@angular/common/http'
 
 export class TableComponent implements OnInit{
     public tableData1: TableData;
-    public crimeData: TableData;
+    crimeData: TableData;
+    criminalData: TableData;
+    neighbourhoodData: TableData;
+    demoData: TableData;
+
+
+    neighLoaded:Boolean;
+    crimeLoaded: Boolean;
+    criminalLoaded: Boolean;
+    demosLoaded: Boolean;
+
+
     constructor(private http: HttpClient){}
 
 
@@ -19,11 +30,15 @@ export class TableComponent implements OnInit{
     }
 
     ngOnInit(){
-        this.http.get('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime').subscribe(data => {
+
+        //Crime
+        this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Crime?page_size=50&page=0').subscribe((data)=> {
             //log api data for crime table
             let dataRows = [];
+            console.log(data);
+            
             //TODO replace with data param once cors is fixed.
-            for (let x of this.api) {
+            for (let x of data) {
                 let row = [x.Crime_ID, x.NID, x.c_datetime, x.description];
                 dataRows.push(row);
             }
@@ -34,79 +49,82 @@ export class TableComponent implements OnInit{
                 headerRow: ['ID', 'Neighbourhood ID', 'Time', 'Description'],
                 dataRows: dataRows
             }
-        });
-        
-        this.tableData1 = {
-            title:'employees saLarIes',
-            subtitle:'Employees salaries by country.',
-            headerRow: [ 'ID', 'Name', 'Country', 'City', 'Salary'],
-            dataRows: [
-                ['1', 'Dakota Rice', 'Niger', 'Oud-Turnhout', '$36,738'],
-                ['2', 'Minerva Hooper', 'Curaçao', 'Sinaai-Waas', '$23,789'],
-                ['3', 'Sage Rodriguez', 'Netherlands', 'Baileux', '$56,142'],
-                ['4', 'Philip Chaney', 'Korea, South', 'Overland Park', '$38,735'],
-                ['5', 'Doris Greene', 'Malawi', 'Feldkirchen in Kärnten', '$63,542'],
-                ['6', 'Mason Porter', 'Chile', 'Gloucester', '$78,615'], 
-                ['1', 'Dakota Rice', 'Niger', 'Oud-Turnhout', '$36,738'],
-                ['2', 'Minerva Hooper', 'Curaçao', 'Sinaai-Waas', '$23,789'],
-                ['3', 'Sage Rodriguez', 'Netherlands', 'Baileux', '$56,142'],
-                ['4', 'Philip Chaney', 'Korea, South', 'Overland Park', '$38,735'],
-                ['5', 'Doris Greene', 'Malawi', 'Feldkirchen in Kärnten', '$63,542'],
-                ['6', 'Mason Porter', 'Chile', 'Gloucester', '$78,615']
-            ]
-        };
+            this.crimeLoaded = true;
+        }, err => {console.log(err)});
+
+        //TODO Criminals
+        this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Criminal?page_size=50&page=0').subscribe((data) => {
+            //log api data for crime table
+            let dataRows = [];
+            console.log(data);
+
+            //TODO replace with data param once cors is fixed.
+            for (let x of data) {
+                let row = [x.Criminal_ID, x.age, x.hair_color, x.height_cm, x.lives_in];
+                dataRows.push(row);
+            }
+
+            this.criminalData = {
+                title: 'Criminals',
+                subtitle: '',
+                headerRow: ['ID', 'Age', 'Hair Colour', 'Height(cm)', 'Neighbourhood (NID)'],
+                dataRows: dataRows
+            }
+            this.criminalLoaded = true;
+        }, err => { console.log(err) });
+        //Neighbourhood
+        this.http.get<any []>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Neighbourhood').subscribe((data) => {
+            //log api data for crime table
+            let dataRows = [];
+            //TODO replace with data param once cors is fixed.
+
+            for (let x of data) {
+                let row = [x.n_name, x.NID, x.DID];
+                dataRows.push(row);
+            }
+            this.neighbourhoodData = {
+                title: 'Neighbourhood',
+                subtitle: '',
+                headerRow: ['Name', 'Neighbourhood ID', 'Demographic ID'],
+                dataRows: dataRows
+            }
+            
+            this.neighLoaded = true;
+        }, err => { console.log(err) });
+
+        //Demographics
+        this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/table/Demographic').subscribe((data) => {
+            //log api data for crime table
+            let dataRows = [];
+            //TODO replace with data param once cors is fixed.
+
+            for (let x of data) {
+                let row = [x.DID, x.population, x.num_old, x.num_old, x.primary_language, x.secondary_language, x.third_language];
+                dataRows.push(row);
+            }
+            this.demoData = {
+                title: 'Demographics',
+                subtitle: '',
+                headerRow: ['Demographic ID', 'Population', 'Number of Youth (<25)', 'Number of seniors(>65)', 'Primary Language', 'Secondary Language', 'Third Language'],
+                dataRows: dataRows
+            }
+            this.demosLoaded = true;
+        }, err => { console.log(err) });
+
+
+
     }
 
-
-    public api = [{
-        "Crime_ID": 1,
-        "NID": 2,
-        "c_datetime": "Tue, 04 Nov 2003 22:40:00 GMT",
-        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
-    }, {
-        "Crime_ID": 2,
-        "NID": 1,
-        "c_datetime": "Sat, 15 Feb 2003 14:40:00 GMT",
-        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
-    }, {
-        "Crime_ID": 3,
-        "NID": 2,
-        "c_datetime": "Tue, 01 Apr 2003 15:11:00 GMT",
-        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
-    }, {
-        "Crime_ID": 4,
-        "NID": 4,
-        "c_datetime": "Tue, 01 Jul 2003 14:55:00 GMT",
-        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
-    }, {
-        "Crime_ID": 5,
-        "NID": 4,
-        "c_datetime": "Mon, 20 Jan 2003 11:00:00 GMT",
-        "description": "Vehicle Collision or Pedestrian Struck (with Injury)"
-    }, {
-        "Crime_ID": 6,
-        "NID": 5,
-        "c_datetime": "Tue, 25 Feb 2003 21:30:00 GMT",
-        "description": "Theft of Bicycle"
-    }, {
-        "Crime_ID": 7,
-        "NID": 2,
-        "c_datetime": "Thu, 14 Aug 2003 10:20:00 GMT",
-        "description": "Theft of Bicycle"
-    }, {
-        "Crime_ID": 8,
-        "NID": 4,
-        "c_datetime": "Sun, 10 Aug 2003 17:00:00 GMT",
-        "description": "Theft of Vehicle"
-    }, {
-        "Crime_ID": 9,
-        "NID": 5,
-        "c_datetime": "Sun, 10 Aug 2003 17:00:00 GMT",
-        "description": "Theft of Vehicle"
-    }, {
-        "Crime_ID": 10,
-        "NID": 2,
-        "c_datetime": "Thu, 17 Jul 2003 00:00:00 GMT",
-        "description": "Theft of Vehicle"
-    }]
 }
+
+
+/*
+DID	9
+num_old	20040
+num_young	23010
+population	43050
+primary_language	"English"
+secondary_language	"Mandarin"
+third_language	"French"
+
+*/

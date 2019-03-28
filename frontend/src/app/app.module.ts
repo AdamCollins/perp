@@ -9,6 +9,7 @@ import { FooterModule } from './shared/footer/footer.module';
 import { NavbarModule} from './shared/navbar/navbar.module';
 import { FixedPluginModule} from './shared/fixedplugin/fixedplugin.module';
 import { NguiMapModule} from '@ngui/map';
+import { FormsModule } from '@angular/forms';
 
 import { DashboardComponent }   from './dashboard/dashboard.component';
 import { UserComponent }   from './user/user.component';
@@ -44,6 +45,7 @@ import { HttpClientModule } from '@angular/common/http';
     SidebarModule,
     NavbarModule,
     FooterModule,
+    FormsModule,
     FixedPluginModule,
     NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=YOUR_KEY_HERE'}),
     HttpClientModule
