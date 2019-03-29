@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Heatmaps</title>
+	<style>
+		/* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+		#map {
+			height: 800px;
+		}
+
+		/* Optional: Makes the sample page fill the window. */
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		#floating-panel {
+			position: absolute;
+			top: 10px;
+			left: 25%;
+			z-index: 5;
+			background-color: #fff;
+			padding: 5px;
+			border: 1px solid #999;
+			text-align: center;
+			font-family: 'Roboto', 'sans-serif';
+			line-height: 30px;
+			padding-left: 10px;
+		}
+
+		#floating-panel {
+			background-color: #fff;
+			border: 1px solid #999;
+			left: 25%;
+			padding: 5px;
+			position: absolute;
+			top: 10px;
+			z-index: 5;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="map"></div>
+	<script>
+		// This example requires the Visualization library. Include the libraries=visualization
+		// parameter when you first load the API. For example:
+		// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
+
+		var map, heatmap;
+
+		function initMap() {
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 12,
+				center: {
+					lat: 49.25,
+					lng: -123.14
+				},
+				mapTypeId: 'satellite'
+			});
+
+			heatmap = new google.maps.visualization.HeatmapLayer({
+				data: getPoints(),
+				map: map
+			});
+			heatmap.set('radius', 40);
+		}
+
+		function toggleHeatmap() {
+			heatmap.setMap(heatmap.getMap() ? null : map);
+		}
+
+		function changeGradient() {
+			var gradient = [
+				'rgba(0, 255, 255, 0)',
+				'rgba(0, 255, 255, 1)',
+				'rgba(0, 191, 255, 1)',
+				'rgba(0, 127, 255, 1)',
+				'rgba(0, 63, 255, 1)',
+				'rgba(0, 0, 255, 1)',
+				'rgba(0, 0, 223, 1)',
+				'rgba(0, 0, 191, 1)',
+				'rgba(0, 0, 159, 1)',
+				'rgba(0, 0, 127, 1)',
+				'rgba(63, 0, 91, 1)',
+				'rgba(127, 0, 63, 1)',
+				'rgba(191, 0, 31, 1)',
+				'rgba(255, 0, 0, 1)'
+			]
+			heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+		}
+
+		function changeRadius() {
+			heatmap.set('radius', heatmap.get('radius') ? null : 40);
+			// heatmap.set('radius', heatmap.get('radius') ? null : 40);
+		}
+
+		function changeOpacity() {
+			heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+		}
+
+		// Heatmap data: 500 Points
+		function getPoints() {
+			var file = "\"NID\",\"n_name\",\"lat\",\"lon\",\"num_crimes\"\n" +
+				"5,\"Dunbar-Southlands\",49.249951,-123.185194,773\n" +
+				"6,\"Fairview\",49.266031,-123.12893999999999,3476\n" +
+				"7,\"Grandview-Woodland\",49.269723,-123.069708,3140\n" +
+				"8,\"Hastings-Sunrise\",49.281126,-123.044077,1879\n" +
+				"9,\"Kensington-Cedar Cottage\",49.248402,-123.07012659999998,2230\n" +
+				"10,\"Kerrisdale\",49.2341326,-123.155351,628\n" +
+				"11,\"Killarney\",49.224703999999996,-123.0410631,959\n" +
+				"12,\"Kitsilano\",49.270936999999996,-123.16214199999999,2949\n" +
+				"13,\"Marpole\",49.210724,-123.130187,1233\n" +
+				"14,\"Mount Pleasant\",49.258266299999995,-123.10818020000002,2403\n" +
+				"15,\"Oakridge\",49.229786,-123.1162,657\n" +
+				"16,\"Renfrew-Collingwood\",49.241065899999995,-123.03875500000001,2326\n" +
+				"17,\"Riley Park\",49.240486,-123.101472,1136\n" +
+				"18,\"Shaughnessy\",49.24533659999999,-123.14132350000001,519\n" +
+				"19,\"South Cambie\",49.2451598,-123.12078559999999,528\n" +
+				"20,\"Strathcona\",49.27375199999999,-123.08847450000002,1799\n" +
+				"21,\"Sunset\",49.219011,-123.1094746,1913\n" +
+				"23,\"West End\",49.285646,-123.1306209,4773\n";
+
+
+
+			var result = [];
+			var lines = file.split("\n");
+
+			for (var i = 1; i < lines.length - 1; i++) {
+				var line = lines[i].split(",");
+				var lat = line[2];
+				var lon = line[3];
+				var count = line[4];
+				console.log(lat);
+				console.log(lon);
+				console.log(count);
+				for (var j = 0; j < count; j++) {
+					result.push(new google.maps.LatLng(lat, lon));
+				}
+
+			}
+			return result;
+		}
+	</script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5dMOeEGw532l14-l_vC5-aA-vpBHLmmQ&libraries=visualization&callback=initMap">
+	</script>
+</body>
+
+</html>
