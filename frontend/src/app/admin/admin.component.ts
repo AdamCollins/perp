@@ -32,7 +32,7 @@ export class AdminComponent implements OnInit {
 
 
 
-	handleAdd(form: any) {
+	private handleAdd(form: any) {
 		console.log('handled');
 		// let msg = 'Incorrect username or password';
 		// let status = 'danger';
@@ -69,11 +69,28 @@ export class AdminComponent implements OnInit {
 			//Password incorrect
 			this.notify('Username or Password Incorrect 👹', 'danger');
 		}
-
-
-
-
 	}
+
+
+	private handleDelete(form: any) {
+		if (form.password == 'thebeesknees') {
+			this.http.get<Object>(`http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/criminal/delete/${form.cid}`)
+				.subscribe((data) => {
+					console.log('data', data);
+					this.notify('Deleted Sucessfully!', 'success');
+				}, (err) => {
+					console.log('Error:');
+					console.log(err.error);
+					console.log(err.name);
+					console.log(err.message);
+					console.log(err.status);
+					this.notify('Delete Failed. Missing a Field? 😥', 'danger');
+				});
+		} else {
+				
+		}
+	}
+
 
 	private notify(msg, status) {
 		let icon = (status == 'success') ? 'ti-thumb-up' : 'ti-thumb-down';
@@ -90,24 +107,6 @@ export class AdminComponent implements OnInit {
 				}
 			});
 	}
-
-	private handleError(error: HttpErrorResponse) {
-		if (error.error instanceof ErrorEvent) {
-			// A client-side or network error occurred. Handle it accordingly.
-			console.error('An error occurred:', error.error.message);
-		} else {
-			// The backend returned an unsuccessful response code.
-			// The response body may contain clues as to what went wrong,
-			console.error(
-				`Backend returned code ${JSON.stringify(error.status)}, ` +
-				`body was: ${JSON.stringify(error.error)}`);
-		}
-		// return an observable with a user-facing error message
-		return _throw(
-			'Something bad happened; please try again later.');
-	};
-
-
 
 	ngOnInit() {
 		this.usersActive = 1;
