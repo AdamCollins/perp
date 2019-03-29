@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit{
       this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/theft/car/all').subscribe(data=>{
         this.allCarsStolen = {
           title: 'Don\'t park your car here',
-          subtitle: 'These neighbourhoods have had all type of car stolen.',
+          subtitle: 'These neighbourhoods have had all types of car stolen.',
           headerRow: ['Neighbourhood'],
           dataRows: data.map(x=>[x.n_name])
         }
