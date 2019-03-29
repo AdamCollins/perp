@@ -111,16 +111,23 @@
             </div>
 
             <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label>Age</label>
                 <input type="number" name="age" class="form-control border-input" placeholder="Age" ngModel>
               </div>
             </div>
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <div class="form-group">
                   <label>Height (cm)</label>
                   <input type="number" name="height" class="form-control border-input" placeholder="Height (cm)" ngModel>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Hair Colour</label>
+                  <input type="text" name="hair" class="form-control border-input" placeholder="Hair Colour"
+                    ngModel>
                 </div>
               </div>
             </div>
@@ -170,18 +177,69 @@
           <p class="category">All products including Taxes</p>
         </div>
         <div class="content">
-          <div id="chartActivity" class="ct-chart"></div>
+          <!-- <form (ngSubmit)="handleAdd(criminalForm.value)" #criminalForm="ngForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Name</label>
+                  <input type="text" name="name" class="form-control border-input" placeholder="Criminal's Name" ngModel>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Neighbourhood</label>
+                  <br />
+                  <select name="neighbourhood" class="custom-select form-control border-input" ngModel>
+                    <option value="-1">NA</option>
+                    <option *ngFor="let n of neighbourhoods; let i = index" value={{i+3}}>{{n}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
-          <div class="footer">
-            <div class="chart-legend">
-              <i class="fa fa-circle text-info"></i> Tesla Model S
-              <i class="fa fa-circle text-warning"></i> BMW 5 Series
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Age</label>
+                  <input type="number" name="age" class="form-control border-input" placeholder="Age" ngModel>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Height (cm)</label>
+                  <input type="number" name="height" class="form-control border-input" placeholder="Height (cm)" ngModel>
+                </div>
+              </div>
             </div>
-            <hr>
-            <div class="stats">
-              <i class="ti-check"></i> Data information certified
+            <div class="row">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>Admin Username</label>
+                  <input type="text" name="username" class="form-control border-input" placeholder="username" ngModel>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Admin Password</label>
+                  <input type="password" name="password" class="form-control border-input" ngModel>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Criminal ID(Update Only)</label>
+                  <input type="number" name="cid" class="form-control border-input" ngModel>
+                </div>
+              </div>
             </div>
-          </div>
+            <div class="text-center">
+              <div class="form-check">
+                <label class="form-check-label">Update</label>
+                <input type="checkbox" name="update" class="form-check-input orm-control border-input" ngModel>
+              </div>
+              <button type="submit" class="btn btn-info btn-fill btn-wd">Add/Update Criminal</button>
+            </div>
+            <div class="clearfix"></div>
+          </form> -->
         </div>
       </div>
     </div>
