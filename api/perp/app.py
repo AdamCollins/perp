@@ -58,7 +58,7 @@ def get_neighbourhoods_where_all_car_stolen():
         return error_to_json(e), 400
 
 
-@app.route("/api/v1/criminal", methods=["POST"])
+@app.route("/api/v1/criminal/add", methods=["GET"])
 def post_criminal():
     client = get_mysql_client()
     try:
@@ -73,7 +73,7 @@ def post_criminal():
         return error_to_json(e), 400
 
 
-@app.route("/api/v1/criminal/<int:criminal_id>", methods=["PATCH"])
+@app.route("/api/v1/criminal/update/<int:criminal_id>", methods=["GET"])
 def patch_criminal(criminal_id):
     client = get_mysql_client()
     try:
@@ -89,7 +89,7 @@ def patch_criminal(criminal_id):
         return error_to_json(e), 400
 
 
-@app.route("/api/v1/criminal/<int:criminal_id>", methods=["DELETE"])
+@app.route("/api/v1/criminal/delete/<int:criminal_id>", methods=["GET"])
 def delete_criminal(criminal_id):
     client = get_mysql_client()
     try:
@@ -99,7 +99,7 @@ def delete_criminal(criminal_id):
         return error_to_json(e), 400
 
 
-@app.route("/api/v1/criminal/column/<column_name>")
+@app.route("/api/v1/criminal/column/<column_name>",  methods=["GET"])
 def get_column_from_criminal(column_name):
     client = get_mysql_client()
     try:

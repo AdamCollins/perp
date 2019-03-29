@@ -200,15 +200,14 @@ class MysqlClient:
                 "All of age, height_cm, hair_color, lives_in must be specified"
             )
 
-        max_id_query_string = "SELECT max(Criminal_ID) max_id from Criminal"
-        max_id = self._select(max_id_query_string)[0]["max_id"]
-        new_id = max_id + 1
-
-        query_string = "INSERT INTO Criminal VALUES ({}, {}, {}, '{}', {})"
+        query_string = """
+        INSERT INTO Criminal(age, height_cm, hair_color, lives_in)
+        VALUES ({}, {}, '{}', {})
+        """
         self._insert(query_string.format(
-            new_id, age, height_cm, hair_color, lives_in
+            age, height_cm, hair_color, lives_in
         ))
-
+        new_id = self._select("select LAST_INSERT_ID()")[0]["LAST_INSERT_ID()"]
         select_string = f"SELECT * FROM Criminal WHERE Criminal_ID = {new_id}"
         return self._select(select_string)[0]
 
