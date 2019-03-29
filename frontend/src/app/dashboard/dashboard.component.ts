@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import * as Chartist from 'chartist';
 import { TableData } from '../models/table-data';
 import { PieData } from '../models/pie-data';
+import { map } from 'rxjs/operators';
 
 
 declare var $:any;
@@ -21,7 +22,7 @@ export class DashboardComponent implements OnInit{
     private allCarsStolen: TableData;
     private carsLoaded = false;
     private pie: PieData;
-
+    private criminalProps = [];
     constructor(private http: HttpClient){}
 
 
@@ -30,16 +31,28 @@ export class DashboardComponent implements OnInit{
       console.log('called');
     }
 
-    
+  criminalProperiesChange(column : string){
+    this.http.get<any[]>(`http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/criminal/column/${column}?page=0&page_size=8`).subscribe(data => {
+      this.criminalProps = data.map((x)=>x[column]);
+      console.log(this.criminalProps);
+      
+    });
+  }
 
     ngOnInit(){
 
+      this.criminalProperiesChange('hair_color');
+
       //load crime count
-`      // this.http.get<any>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/crimes/count?year_from=2000&year_to=2019').subscribe(data=>{
-      //   data = data[0];
-      //   this.numCrimes = data.num_collision+data.num_other+data.num_theft;
-      //   console.log(data);
-      // });`
+      this.http.get<any[]>('http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/theft/car/all').subscribe(data=>{
+        this.allCarsStolen = {
+          title: 'Don\'t park your car here',
+          subtitle: 'These neighbourhoods have had all type of car stolen.',
+          headerRow: ['Neighbourhood'],
+          dataRows: data.map(x=>[x.n_name])
+        }
+        this.carsLoaded = true;
+      });
 
       //load neighbourhoods where all cars stolen
         //http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/theft/car/all

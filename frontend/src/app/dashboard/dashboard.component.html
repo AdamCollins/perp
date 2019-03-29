@@ -165,43 +165,61 @@
         </div>
         <!-- starts and shit -->
         <div class="row">
-            <div class="col-md-12" *ngIf="carsLoaded">
-                <app-tablechart [size]="3" [data]="allCarsStolen"></app-tablechart>
+            <div class="col-md-6 row-eq-height">
+                <app-tablechart [size]="3" [data]="allCarsStolen" *ngIf="carsLoaded"></app-tablechart>
+            </div>
+            <div class="col-md-6 .row-eq-height">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Most common attributes of criminals</h4>
+                    <form>
+                        <select name="neighbourhood" class="custom-select form-control border-input"
+                          (change)="criminalProperiesChange($event.target.value)">
+                        <option value="hair_color">Hair Colour</option>
+                        <option value="age">Age</option>
+                        <option value="height_cm">Height (cm)</option>
+                    </select>
+                        <ul>
+                            <li *ngFor="let x of criminalProps"><h5>{{x}}</h5></li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
             </div>
         </div>
         <!-- Pie charts -->
 
         <div class="row">
-                        <div class="col-md-6">
-                          <div class="card">
-                            <div class="header">
-                              <h4 class="title">Crimes by Neighbourhood</h4>
-                              <select class="custom-select">
-                                <option value="1" selected>Point Grey</option>
-                                <option value="2">Kitsilano</option>
-                                <option value="3">Westend</option>
-                              </select>
-                            </div>
-                            <div class="content">
-                                
-                                
-                              <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-                              <div class="footer">
-                                <div class="chart-legend">
-                                  <i class="fa fa-circle text-info"></i> Vehicle Collisions
-                                  <i class="fa fa-circle text-danger"></i> Violent Crimes
-                                  <i class="fa fa-circle text-warning"></i> Theft
-                                </div>
-                                <hr>
-                                <div class="stats">
-                                  <i class="ti-timer"></i> <a
-                                    href='https://vancouver.ca/your-government/open-data-catalogue.aspx'>From CoV Data
-                                    Catalouge</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+        <div class="col-md-6">
+            <div class="card">
+            <div class="header">
+                <h4 class="title">Crimes by Neighbourhood</h4>
+                <select class="custom-select">
+                <option value="1" selected>Point Grey</option>
+                <option value="2">Kitsilano</option>
+                <option value="3">Westend</option>
+                </select>
+            </div>
+            <div class="content">
+                
+                
+                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                <div class="footer">
+                <div class="chart-legend">
+                    <i class="fa fa-circle text-info"></i> Vehicle Collisions
+                    <i class="fa fa-circle text-danger"></i> Violent Crimes
+                    <i class="fa fa-circle text-warning"></i> Theft
+                </div>
+                <hr>
+                <div class="stats">
+                    <i class="ti-timer"></i> <a
+                    href='https://vancouver.ca/your-government/open-data-catalogue.aspx'>From CoV Data
+                    Catalouge</a>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
              <div class="col-md-6">
                <div class="card">
                  <div class="header">

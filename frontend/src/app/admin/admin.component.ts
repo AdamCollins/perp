@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import * as Chartist from 'chartist';
 import { PieData } from '../models/pie-data';
-
+import { catchError, retry } from 'rxjs/operators';
+import { _throw } from 'rxjs/observable/throw';
 declare var $: any;
 
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json'
+    'Accept': 'application/json',
+    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
+    'Access-Control-Allow-Origin' : '*' 
   })
-};
+}
 
 @Component({
   selector: 'app-admin',
@@ -23,7 +27,6 @@ export class AdminComponent implements OnInit {
   usersTotal:number;
   neighbourhoods = ['Arbutus-Ridge', 'Downtown', 'Dunbar-Southlands', 'Fairview', 'Grandview-Woodland', 'Hastings-Sunrise', 'Kensington-Cedar Cottage', 'Kerrisdale', 'Killarney', 'Kitsilano', 'Marpole', 'Mount Pleasant', 'Oakridge', 'Renfrew-Collingwood', 'Riley Park', 'Shaughnessy', 'South Cambie', 'Strathcona', 'Sunset', 'Victoria-Fraserview', 'West End'];
   pie:PieData;
-  posturl = "localost:5555/form";
   
   constructor(private http : HttpClient){}
 
@@ -31,38 +34,70 @@ export class AdminComponent implements OnInit {
 
   handleAdd(form: any){
     console.log('handled');
-    let msg = 'Incorrect username or password';
-    let status = 'danger';
-    let icon = 'ti-thumb-down';
-      if(form.password == 'thebeesknees'){
-      const item: Object = {
+    // let msg = 'Incorrect username or password';
+    // let status = 'danger';
+    // let icon = 'ti-thumb-down';
+      // if(form.password == 'thebeesknees'){
+     const item = {
         name: form.name,
         neighbourhood: form.neighbourhood,  
         age: form.age,  
         height: form.height,
         cid: form.cid,
+        hair: form.hair,
         update: form.update
       }
 
-        console.log(this.http.post<Object>(this.posturl, item, httpOptions));
+
+      console.log(item);
+        
+      this.http.post<Object>(`http://perp-alb-1105201303.us-east-2.elb.amazonaws.com/api/v1/criminal?age=${item.age}&height_cm=${item.height}&hair_color=${item.hair}&lives_in=${item.neighbourhood}`, {}, httpOptions)
+        .subscribe((data)=>{
+          console.log('data',data);
+        },(err)=>{
+          console.log('Error:');
+          console.log(err.error);
+          console.log(err.name);
+          console.log(err.message);
+          console.log(err.status);
+        });
 
 
-      msg = 'Success!';
-      status = 'success';
-      icon = 'ti-thumb-up';  
-    }
-    $.notify({
-      icon: icon,
-      message: msg
-    }, {
-        type: status,
-        timer: 4000,
-        placement: {
-          from: 'top',
-          align: 'right'
-        }
-      });
+        
+
+    //   msg = 'Success!';
+    //   status = 'success';
+    //   icon = 'ti-thumb-up';  
+    // }
+    // $.notify({
+    //   icon: icon,
+    //   message: msg
+    // }, {
+    //     type: status,
+    //     timer: 4000,
+    //     placement: {
+    //       from: 'top',
+    //       align: 'right'
+    //     }
+    //   });
   }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${JSON.stringify(error.status)}, ` +
+        `body was: ${JSON.stringify(error.error)}`);
+    }
+    // return an observable with a user-facing error message
+    return _throw(
+      'Something bad happened; please try again later.');
+  };
+  
 
 
   ngOnInit() {
