@@ -5,7 +5,8 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 import { SidebarModule } from './sidebar/sidebar.module';
-import { FooterModule } from './shared/footer/footer.module';
+//import { FooterModule } from './shared/footer/footer.module';
+import { FooterModule } from './shared/footer/footer.module'
 import { NavbarModule} from './shared/navbar/navbar.module';
 import { FixedPluginModule} from './shared/fixedplugin/fixedplugin.module';
 import { NguiMapModule} from '@ngui/map';
@@ -23,6 +24,7 @@ import { AdminComponent } from './admin/admin.component';
 import { PiechartComponent } from './charts/piechart/piechart.component';
 import { TablechartComponent } from './charts/tablechart/tablechart.component';
 import { HttpClientModule } from '@angular/common/http';
+import { HeatmapComponent } from './charts/heatmap/heatmap.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
     UpgradeComponent,
     AdminComponent,
     PiechartComponent,
-    TablechartComponent
+    TablechartComponent,
+    HeatmapComponent
   ],
   imports: [
     BrowserModule,
